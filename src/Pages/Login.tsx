@@ -1,19 +1,25 @@
 import { useEffect, useState } from "react";
 import { GoEye, GoEyeClosed } from "react-icons/go";
 import { Link } from "react-router"
-import Loading from "../Component/Authentication/Loading.jsx";
+import { useDispatch } from "react-redux";
+import { setUserData } from "../redux/User.js";
+import Loading from "../Component/Authentication/Loading.js";
 
-interface User{
-  username:string;
-  password:string;
+interface User {
+  username: string;
+  password: string;
 }
+
+
 function Login() {
 
-  const [loading,setLoading]=useState(false);
-  
-  const [user,setUser]=useState<User>({
-    username:"",
-    password:""
+  const dispatch = useDispatch();
+
+  const [loading, setLoading] = useState(false);
+
+  const [user, setUser] = useState<User>({
+    username: "",
+    password: ""
   });
 
   const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -25,15 +31,14 @@ function Login() {
     SetTitle();
   }, []);
 
-  function InputChange(e)
-  {
-    setUser((prev)=>({
-      ...prev,[e.target.name]:e.target.value
+  function InputChange(e:any) {
+    setUser((prev) => ({
+      ...prev, [e.target.name]: e.target.value
     }));
   }
 
-  function FormSubmit()
-  {
+  function FormSubmit() {
+    dispatch(setUserData(user));
     console.log(user);
     setLoading(true);
   }
@@ -53,17 +58,17 @@ function Login() {
           <div className="flex flex-col gap-2 bg-zinc-200 px-4 py-3 rounded-[8px]">
             <label htmlFor="password" className="font-medium text-zinc-700 text-[13px]">Password</label>
             <div className="w-full flex justify-between">
-              <input onChange={InputChange} required name="password" id="password" type={!showPassword ? "password":"text"} className="outline-none w-[90%] text-sm" />
-                {
-                  showPassword ?
-                    <button onClick={()=>{setShowPassword(false)}}>
-                      <GoEye /> 
-                    </button>
-                    :
-                    <button onClick={()=>setShowPassword(true)}>
-                      <GoEyeClosed />
-                    </button>
-                }
+              <input onChange={InputChange} required name="password" id="password" type={!showPassword ? "password" : "text"} className="outline-none w-[90%] text-sm" />
+              {
+                showPassword ?
+                  <button onClick={() => { setShowPassword(false) }}>
+                    <GoEye />
+                  </button>
+                  :
+                  <button onClick={() => setShowPassword(true)}>
+                    <GoEyeClosed />
+                  </button>
+              }
             </div>
           </div>
           <div className="text-[12px] w-full flex justify-end font-medium">
@@ -73,7 +78,7 @@ function Login() {
             <button onClick={FormSubmit} className="bg-black rounded text-white px-4 py-2 shadow-md font-medium w-full flex justify-center items-center hover:bg-black/85 active:bg-black active:shadow-none">
               {
                 loading ?
-                <Loading/>:"Sign In"
+                  <Loading /> : "Sign In"
               }
             </button>
           </div>

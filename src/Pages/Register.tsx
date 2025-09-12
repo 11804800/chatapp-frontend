@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { Link, useNavigate } from "react-router"
-import Loading from "../Component/Authentication/Loading.jsx";
+import Loading from "../Component/Authentication/Loading.js";
 
 interface User {
   firstname: string,
