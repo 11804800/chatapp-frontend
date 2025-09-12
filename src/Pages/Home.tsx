@@ -4,6 +4,9 @@ import { useSelector } from "react-redux";
 import type { RootState } from "../redux/Store.tsx";
 import { useContext } from "react";
 import { SocketContext } from "../SocketProvider/SockerProvider.tsx";
+import MainPage from "../Component/Home/MainPage.tsx";
+import MessageContainer from "../Component/Home/MessageContainer.tsx";
+import SideNavigation from "../Component/SideNav/SideNavigation.tsx";
 function Home() {
 
   // useEffect(() => {
@@ -19,18 +22,18 @@ function Home() {
   //   GetData();
   // }, []);
 
-  const context=useContext(SocketContext);
-    const User:object=useSelector((state:RootState)=>{
+  const context = useContext(SocketContext);
+  const User: object = useSelector((state: RootState) => {
     return state.user.user
   });
 
-  console.log(User,context);
-  
+  console.log(User, context);
+
   return (
-    <div className="h-screen w-full flex justify-center items-center">
-      <p className="text-xl">
-        Home
-      </p>
+    <div className="relative h-screen w-full flex flex-col-reverse md:flex-row">
+      <SideNavigation/>
+      <MainPage/>
+      {/* <MessageContainer/> */}
     </div>
   )
 }
