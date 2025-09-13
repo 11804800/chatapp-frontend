@@ -1,15 +1,27 @@
-import { lazy, Suspense } from "react"
+import { lazy, Suspense} from "react"
+import { useSelector } from "react-redux";
 import { Route, Routes } from "react-router"
+import type { RootState } from "./redux/Store";
 const Home = lazy(() => import("./Pages/Home"));
 const Login = lazy(() => import("./Pages/Login"));
 const Register = lazy(() => import("./Pages/Register"));
 
 function App() {
+
+  const isAuthenticated=useSelector((state:RootState)=>{
+    return state.user.username
+  });
+  
   return (
     <Routes>
       <Route path="/" element={
         <Suspense fallback={<div className="w-full h-screen flex justify-center items-center"><p>Loading...</p></div>}>
-          <Home />
+          {
+            isAuthenticated ? 
+            <Home />
+            :
+            <Login/>
+          }
         </Suspense>
       } />
       <Route path="/login" element={

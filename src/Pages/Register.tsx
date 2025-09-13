@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react"
 import { Link, useNavigate } from "react-router"
 import Loading from "../Component/Authentication/Loading.js";
+import { AxiosVite } from "../utils/Axios.js";
+import { useDispatch } from "react-redux";
+import { setToken, setUserData, setUsername } from "../redux/User.js";
 
 interface User {
   firstname: string,
@@ -11,9 +14,11 @@ interface User {
 
 function Register() {
 
-  const navigate=useNavigate();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  const [loading,setLoading]=useState(false);
+  const [loading, setLoading] = useState(false);
+  const [formError, setFormError] = useState<string | null>(null);
 
   useEffect(() => {
     function SetTitle() {
@@ -31,18 +36,36 @@ function Register() {
   });
 
 
-  function InputChange(e) {
+  function InputChange(e: any) {
     setUser((prev) => ({
       ...prev, [e.target.name]: e.target.value
     }))
   }
 
-  function SubmitForm(e)
-  {
-    setLoading(true);
-    e.preventDefault();
+  function SubmitForm(e: any) {
+
+    const body: object = {
+      username: user.username,
+      password: user.password,
+      firstname: user.firstname,
+      lastname: user.lastname
+    }
     console.log(user);
-    navigate("/")
+    e.preventDefault();
+    setLoading(true);
+    AxiosVite.post("/users/register", body)
+      .then((response: any) => {
+        dispatch(setUserData(user));
+        dispatch(setUsername(user.username));
+        dispatch(setToken(response.data.token));
+        localStorage.setItem("token", JSON.stringify(response.data.token));
+        localStorage.setItem("user", JSON.stringify(user));
+        setLoading(false);
+        navigate("/");
+      }).catch((err: any) => {
+        setLoading(false);
+        setFormError(err.response.data.message.message);
+      })
   }
 
   return (
@@ -71,12 +94,13 @@ function Register() {
             <label htmlFor="password" className="font-medium text-zinc-700 text-[13px]">Password</label>
             <input required onChange={InputChange} name="password" id="password" type="text" className="outline-none text-sm" />
           </div>
+          <p className="text-[brown] font-medium text-sm">{formError}</p>
           <div className="w-full">
-            <button type="submit" className="bg-black rounded-[8px] text-white px-4 py-2 shadow-md font-medium w-full hover:bg-black/85 active:bg-black active:shadow-none">
+            <button type="submit" className="bg-black rounded-[8px] flex justify-center text-white px-4 py-2 shadow-md font-medium w-full hover:bg-black/85 active:bg-black active:shadow-none">
               {
                 loading ?
-                <Loading/>
-                :"Sign Up"
+                  <Loading />
+                  : "Sign Up"
               }
             </button>
           </div>
