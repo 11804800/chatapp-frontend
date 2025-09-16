@@ -6,13 +6,13 @@ import MessageSelect from "../UserComponent/MessageSelect"
 function MainPage() {
     return (
         <div className="shrink-0 w-full md:w-[510px] h-[90%] md:h-full flex flex-col">
-            <div className="w-full flex justify-between items-center px-4 py-4 shrink-0">
+            <div className="w-full flex justify-between items-center px-4 py-2 shrink-0">
                 <p className="font-bold text-[22px] leading-[0.8]"> ChatApp</p>
                 <div className="flex gap-10">
-                    <button>
+                    <button className="hover:bg-zinc-200 p-2 rounded-full active:bg-zinc-100">
                         <BiCommentAdd size={23} />
                     </button>
-                    <button>
+                    <button className="hover:bg-zinc-200 p-2 rounded-full active:bg-zinc-100">
                         <BsThreeDotsVertical size={21} />
                     </button>
                 </div>
@@ -24,15 +24,6 @@ function MainPage() {
                 </div>
             </div>
             <div className="Scroll-Container flex flex-col w-full overflow-y-auto h-full pb-4 p-3">
-                <MessageSelect/>
-                <MessageSelect/>
-                <MessageSelect/>
-                <MessageSelect/>
-                <MessageSelect/>
-                <MessageSelect/>
-                <MessageSelect/>
-                <MessageSelect/>
-                <MessageSelect/>
                 <MessageSelect/>
             </div>
         </div>

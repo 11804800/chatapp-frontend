@@ -1,15 +1,20 @@
 import { createContext, type ReactNode } from "react"
+import {io} from 'socket.io-client';
 
 type SocketProviderProps = {
   children: ReactNode;
 };
 
-export const SocketContext=createContext({});
+export const SocketContext = createContext({});
 
-function SockerProvider({children}:SocketProviderProps) {
+const ENDPOINTS = import.meta.env.VITE_API_SOCKET_URL;
+
+// ENDPOINTS, { transports: ['websocket'] }), []
+function SockerProvider({ children }: SocketProviderProps) {
+  const socket: any =io(ENDPOINTS);
   return (
-    <SocketContext.Provider value={"t"}>
-        {children}
+    <SocketContext.Provider value={{ socket: socket }}>
+      {children}
     </SocketContext.Provider>
   )
 }

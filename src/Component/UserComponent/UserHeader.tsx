@@ -1,7 +1,16 @@
 import { BsThreeDotsVertical } from "react-icons/bs"
 import { FaSearch } from "react-icons/fa"
+import { useSelector } from "react-redux"
+import type { RootState } from "../../redux/Store"
 
 function UserHeader() {
+
+  const recipientName:string| null=useSelector((state:RootState)=>{
+    return state.user.recipientName
+  });
+
+  console.log(recipientName);
+  
   return (
     <div className="shrink-0 w-full p-2 flex items-center shadow-lg">
       <img src="../profile.jpg" className="w-15 h-15 rounded-full shrink-0 p-1 object-cover"/>

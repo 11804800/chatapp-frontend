@@ -1,6 +1,16 @@
+import { useDispatch } from "react-redux"
+import { setRecipientName } from "../../redux/User";
+
 function MessageSelect() {
+    const dispatch=useDispatch();
+    function SetRecipient(name:string)
+    {
+        console.log(name);
+        dispatch(setRecipientName(name));
+    }
+
     return (
-        <div className="w-full flex hover:bg-zinc-200 p-2 rounded-lg">
+        <div className="w-full flex hover:bg-zinc-200 p-2 rounded-lg" onClick={()=>SetRecipient("nikhil")}>
             <img src="../profile.jpg" className="w-15 h-15 rounded-full shrink-0 object-cover" />
             <div className="flex justify-between w-full p-2">
                 <div className="">
