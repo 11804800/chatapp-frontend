@@ -3,7 +3,8 @@ import { Link, useNavigate } from "react-router"
 import Loading from "../Component/Authentication/Loading.js";
 import { AxiosVite } from "../utils/Axios.js";
 import { useDispatch } from "react-redux";
-import { setToken, setUserData, setUsername } from "../redux/User.js";
+import { setToken, setUserData } from "../redux/User.js";
+import ProfileSetup from "../Component/Authentication/ProfileSetup.js";
 
 interface User {
   firstname: string,
@@ -56,10 +57,8 @@ function Register() {
     AxiosVite.post("/users/register", body)
       .then((response: any) => {
         dispatch(setUserData(user));
-        dispatch(setUsername(user.username));
         dispatch(setToken(response.data.token));
         localStorage.setItem("token", JSON.stringify(response.data.token));
-        localStorage.setItem("user", JSON.stringify(user));
         setLoading(false);
         navigate("/");
       }).catch((err: any) => {
@@ -69,7 +68,7 @@ function Register() {
   }
 
   return (
-    <div className="w-full h-full flex justify-center">
+    <div className="w-full h-full flex justify-center relative">
       <div className="w-[100%] sm:w-[500px] flex flex-col justify-center items-center h-full p-4">
         <div className="py-8 w-full flex flex-col">
           <h1 className="text-4xl font-semibold text-start pb-2">Sign Up</h1>
@@ -127,6 +126,7 @@ function Register() {
           <p>Here</p>
         </div>
       </div>
+      <ProfileSetup />
     </div>
   )
 }

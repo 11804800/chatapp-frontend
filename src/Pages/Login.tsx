@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { GoEye, GoEyeClosed } from "react-icons/go";
 import { Link, useNavigate } from "react-router"
 import { useDispatch } from "react-redux";
-import { setToken, setUserData, setUsername } from "../redux/User.js";
+import { setToken, setUserData } from "../redux/User.js";
 import Loading from "../Component/Authentication/Loading.js";
 import { AxiosVite } from "../utils/Axios.js";
 
@@ -49,9 +49,7 @@ function Login() {
       }
       AxiosVite.post("/users/login", body).then((response: any) => {
         dispatch(setUserData(user));
-        dispatch(setUsername(user.username));
         dispatch(setToken(response.data.token));
-        localStorage.setItem("user", JSON.stringify(user));
         localStorage.setItem("token", JSON.stringify(response.data.token));
         setLoading(false);
         navigate("/");

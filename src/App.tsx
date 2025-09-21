@@ -1,40 +1,85 @@
-import { lazy, Suspense} from "react"
+import { lazy, Suspense, } from "react"
 import { useSelector } from "react-redux";
-import { Route, Routes } from "react-router"
+import { Navigate, Route, Routes, useLocation } from "react-router"
 import type { RootState } from "./redux/Store";
-const Home = lazy(() => import("./Pages/Home"));
+const HomePage = lazy(() => import("./Pages/HomePage"));
 const Login = lazy(() => import("./Pages/Login"));
 const Register = lazy(() => import("./Pages/Register"));
+import gsap from 'gsap';
+import { ScrollTrigger } from "gsap/all";
+import ShowAllUserModal from "./Component/Modals/ShowAllUserModal";
+const HomeLayout = lazy(() => import("./Layout/HomeLayout"));
+const SettingPage = lazy(() => import("./Pages/SettingPage"));
+const StatusPage = lazy(() => import("./Pages/StatusPage"));
+const Dashboard = lazy(() => import("./Pages/Dashboard"));
+gsap.registerPlugin(ScrollTrigger);
 
 function App() {
 
-  const isAuthenticated=useSelector((state:RootState)=>{
-    return state.user.username
+  const location = useLocation();
+
+  const isAuthenticated = useSelector((state: RootState) => {
+    return state.user.token
   });
-  
+
+  const showContactModal = useSelector((state: RootState) => {
+    return state.contact.showContactModal
+  });
+
+
+  const PrivateRoute = ({ children }: any) => {
+    return isAuthenticated ? (
+      children
+    ) : (
+      <Navigate to="/login" state={{ from: location }} replace />
+    );
+  };
+
+  const AuthenticatedRoute = ({ children }: any) => {
+    return !isAuthenticated ?
+      (children) :
+      (
+        <Navigate to="/" state={{ from: location }} replace />
+      );
+  }
+
+
   return (
-    <Routes>
-      <Route path="/" element={
-        <Suspense fallback={<div className="w-full h-screen flex justify-center items-center"><p>Loading...</p></div>}>
-          {
-            isAuthenticated ? 
-            <Home />
-            :
-            <Login/>
-          }
-        </Suspense>
-      } />
-      <Route path="/login" element={
-        <Suspense fallback={<div className="w-full h-screen flex justify-center items-center"><p>Loading...</p></div>}>
-          <Login />
-        </Suspense>
-      } />
-      <Route path="/signup" element={
-        <Suspense fallback={<div className="w-full h-screen flex justify-center items-center"><p>Loading...</p></div>}>
-          <Register />
-        </Suspense>
-      } />
-    </Routes>
+    <>
+      {
+        showContactModal
+        &&
+        <ShowAllUserModal />
+      }
+      <Routes>
+        <Route path="/" element={
+          <Suspense fallback={<div className="w-full h-screen flex justify-center items-center"><p>Loading...</p></div>}>
+            <PrivateRoute>
+              <HomeLayout />
+            </PrivateRoute>
+          </Suspense>
+        } >
+          <Route index element={<HomePage />} />
+          <Route path="status" element={<StatusPage />} />
+          <Route path="setting" element={<SettingPage />} />
+          <Route path="dashboard" element={<Dashboard />} />
+        </Route>
+        <Route path="/login" element={
+          <Suspense fallback={<div className="w-full h-screen flex justify-center items-center"><p>Loading...</p></div>}>
+            <AuthenticatedRoute>
+              <Login />
+            </AuthenticatedRoute>
+          </Suspense>
+        } />
+        <Route path="/signup" element={
+          <Suspense fallback={<div className="w-full h-screen flex justify-center items-center"><p>Loading...</p></div>}>
+            <AuthenticatedRoute>
+              <Register />
+            </AuthenticatedRoute>
+          </Suspense>
+        } />
+      </Routes>
+    </>
   )
 }
 

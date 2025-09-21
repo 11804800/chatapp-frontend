@@ -1,30 +1,72 @@
-import { BiCommentAdd, BiSearchAlt } from "react-icons/bi"
+import { BiCheckSquare, BiCommentAdd } from "react-icons/bi"
+import { IoSearchOutline } from "react-icons/io5";
 import { BsThreeDotsVertical } from "react-icons/bs"
-import MessageSelect from "../UserComponent/MessageSelect"
+import RecipentList from "../UserComponent/RecipentList"
+import { useDispatch, useSelector } from "react-redux"
+import { setShowContactModal } from "../../redux/Contact";
+import { LuLogOut } from "react-icons/lu";
+import { useEffect, useRef, useState } from "react";
+import type { RootState } from "../../redux/Store";
 
 
 function MainPage() {
+    const dispatch = useDispatch();
+    const OptionRef: any = useRef(null);
+    const [showOption, setShowOption] = useState(false);
+
+    const recipientName: string | null = useSelector((state: RootState) => {
+        return state.user.recipientName
+    });
+
+
+    useEffect(() => {
+        if (!showOption) return;
+        const handler = (e: any) => {
+            if (OptionRef.current && !OptionRef.current.contains(e.target)) {
+                setShowOption(false);
+            }
+        }
+        document.addEventListener("mousedown", handler);
+        return () => {
+            document.removeEventListener("mousedown", handler);
+        }
+    }, [showOption]);
     return (
-        <div className="shrink-0 w-full md:w-[510px] h-[90%] md:h-full flex flex-col">
+        <div className={`shrink-0 w-full md:w-[350px] relative lg:w-[450px] xl:w-[510px] h-full ${recipientName ? "hidden md:flex" : "flex"} flex-col`}>
             <div className="w-full flex justify-between items-center px-4 py-2 shrink-0">
                 <p className="font-bold text-[22px] leading-[0.8]"> ChatApp</p>
                 <div className="flex gap-10">
-                    <button className="hover:bg-zinc-200 p-2 rounded-full active:bg-zinc-100">
+                    <button onClick={() => dispatch(setShowContactModal())} className="hover:bg-zinc-200 p-2 rounded-full active:bg-zinc-100">
                         <BiCommentAdd size={23} />
                     </button>
-                    <button className="hover:bg-zinc-200 p-2 rounded-full active:bg-zinc-100">
-                        <BsThreeDotsVertical size={21} />
-                    </button>
+                    <div className="relative">
+                        <button onClick={() => setShowOption(true)} className="hover:bg-zinc-200 p-2 rounded-full active:bg-zinc-100">
+                            <BsThreeDotsVertical size={21} />
+                        </button>
+                        {
+                            showOption &&
+                            <div ref={OptionRef} className="absolute top-9 right-0 md:left-0 p-4 flex flex-col gap-2 rounded-md drop-shadow-2xl bg-white">
+                                <button className="flex active:bg-transparent text-sm gap-2 items-center pr-8 py-2 pl-2 rounded-md text-nowrap hover:bg-zinc-100">
+                                    <BiCheckSquare />
+                                    Select Chats
+                                </button>
+                                <button className="flex text-sm active:bg-transparent gap-2 items-center text-nowrap pr-8 pl-2 rounded-md py-2 hover:bg-zinc-100">
+                                    <LuLogOut />
+                                    Logout
+                                </button>
+                            </div>
+                        }
+                    </div>
                 </div>
             </div>
             <div className="px-4 py-2 shrink-0">
                 <div className="w-full flex items-center gap-4 px-4 bg-zinc-100 rounded-full">
-                    <BiSearchAlt />
+                    <IoSearchOutline />
                     <input type="text" className="w-full py-2 outline-none" placeholder="search or start a new chat" />
                 </div>
             </div>
             <div className="Scroll-Container flex flex-col w-full overflow-y-auto h-full pb-4 p-3">
-                <MessageSelect/>
+                <RecipentList />
             </div>
         </div>
     )
