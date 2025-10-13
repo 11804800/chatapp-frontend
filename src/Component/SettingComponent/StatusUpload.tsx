@@ -1,6 +1,9 @@
 import { IoSend } from "react-icons/io5";
 import { GoPlus } from "react-icons/go";
 import { useRef } from "react";
+import { AxiosVite } from "../../utils/Axios";
+import { useSelector } from "react-redux";
+import type { RootState } from "../../redux/Store";
 
 function RenderFile({ file }: any) {
     const fileType: string = file.type;
@@ -22,6 +25,30 @@ function RenderFile({ file }: any) {
 function StatusUpload({ file, setStatusActive }: any) {
 
     const StatusInputRef: any = useRef(null);
+
+    const token: string | null = useSelector((state: RootState) => {
+        return state.user.token
+    });
+
+    function UploadStatus() {
+        const form = new FormData();
+        form.append("text", "text");
+        form.append("media", file);
+        form.append("mediaType", file.type.startsWith("image/") ? "image" : "video")
+        AxiosVite.post("/status", form, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                'Authorization': `bearer ${token}`
+            },
+        }).then((response) => {
+            if (response) {
+                setStatusActive(false);
+            }
+        }).catch((err) => {
+            console.log(err);
+        })
+    }
+
     return (
         <div className='h-screen w-full fixed top-0 left-0 bg-white p-4'>
             <div className="">
@@ -46,8 +73,8 @@ function StatusUpload({ file, setStatusActive }: any) {
                         <GoPlus size={28} />
                     </button>
                 </div>
-                <input type="file" accept="image/*,video/*" ref={StatusInputRef} className="hidden" />
-                <button className="text-white w-fit h-fit bg-green-600 p-3 flex justify-center items-center rounded-full drop-shadow-xl">
+                <input type="file" accept="*" ref={StatusInputRef} className="hidden" />
+                <button onClick={UploadStatus} className="text-white w-fit h-fit bg-green-600 p-3 flex justify-center items-center rounded-full drop-shadow-xl">
                     <IoSend size={28} />
                 </button>
             </div>

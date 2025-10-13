@@ -6,8 +6,10 @@ import MessageOption from "./MessageOption";
 function RenderMessage({ item }: any) {
 
 
-  const reciver: string | null = useSelector((state: RootState) => {
-    return state.user.recipientName
+
+
+  const userData: any = useSelector((state: RootState) => {
+    return state.user.userData
   });
 
   const [showMessageOption, setShowMessageOption] = useState(false);
@@ -18,13 +20,13 @@ function RenderMessage({ item }: any) {
     setShowMessageOption(!showMessageOption)
   }
 
-  if (item.reciver == reciver) {
+  if (item.consumer == userData?._id) {
     return (
       <div className="w-full flex group justify-start relative">
         <div className="self-start  flex px-2 drop-shadow relative shrink-0 overflow-hidden">
           <div className="rotate-45 translate-x-[8px] -translate-y-1.5 w-[12px] h-[12px] bg-white rounded"></div>
           <div className="bg-white font-medium px-2 py-1  w-fit  flex items-start rounded-md">
-            <p className="px-2">Hello</p>
+            <p className="px-2">{item.message}</p>
             <div className="flex gap-[2px] relative -bottom-1 h-full items-center px-2">
               <p className="text-[10px]">12:04</p>
             </div>
@@ -50,7 +52,7 @@ function RenderMessage({ item }: any) {
         </button>
         <div className="relative  self-end flex  px-2 drop-shadow shrink-0 overflow-hidden">
           <div className="bg-[#d9fdd3] font-medium px-2 py-1  w-fit  flex items-start rounded-md">
-            <p className="px-2">Hello</p>
+            <p className="px-2">{item.message}</p>
             <div className="flex gap-[2px] relative -bottom-1 h-full items-center px-2">
               <p className="text-[10px]">12:04</p>
               <BiCheck />

@@ -59,14 +59,14 @@ function StatusPage() {
           <div className="w-full flex justify-between items-center">
             <h1 className="text-2xl font-medium">Status</h1>
             <div className="flex gap-8">
-              <input ref={StatusUploadInputRef} type="file" accept="image/*,video/*" onChange={UploadFile} className="hidden" />
+              <input ref={StatusUploadInputRef} type="file" accept="*" onChange={UploadFile} className="hidden" />
               <div className="relative flex items-center">
                 <button onClick={() => setStatusOptionActive(true)} className="hover:bg-zinc-100 rounded-full p-2 active:bg-white">
                   <FiPlusCircle size={23} />
                 </button>
                 {
                   StatusOptionActive &&
-                  <div ref={StatusOptionRef} className="p-3 rounded-2xl drop-shadow-2xl bg-white flex flex-col gap-2 absolute top-9 right-0 z-50">
+                  <div ref={StatusOptionRef} className="p-3 rounded-2xl drop-shadow-2xl bg-white flex flex-col gap-2 absolute top-9 w-[200px] md:left-0 right-0 z-50">
                     <button onClick={() => {
                       StatusUploadInputRef.current.click()
                     }} className="px-2 py-2 rounded-md hover:bg-zinc-100 flex gap-2 text-sm items-center text-nowrap active:bg-transparent">
@@ -118,9 +118,7 @@ function StatusPage() {
         <div className="hidden md:flex w-full justify-center items-center h-full ">
           <div className="flex flex-col justify-center items-center gap-4">
             <div className="w-fit text-zinc-400">
-              <span className={`border-4 p-[3px] rounded-full block border-dashed w-fit border-zinc-400`}>
-                <span className={`border-2 p-1 w-14 h-14 block rounded-full shrink-0 bg-zinc-400`}></span>
-              </span>
+              <img src="./Status-Gray.png" className="w-14 h-14" />
             </div>
             <h1 className="font-light text-zinc-600 text-3xl">Share Status Updates</h1>
             <p className="text-center font-light text-sm">Share Photos, Videos and text that will disappear after 24 hours</p>

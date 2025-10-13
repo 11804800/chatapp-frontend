@@ -4,12 +4,19 @@ import type { RootState } from "../../redux/Store"
 import { setShowContactModal } from "../../redux/Contact";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
+import { AddNewContact } from "../../redux/User";
+import { AxiosVite } from "../../utils/Axios";
 
 function ShowAllUserModal() {
 
     const ContactData = useSelector((state: RootState) => {
         return state.contact.Data
     });
+
+    const token = useSelector((state: RootState) => {
+        return state.user.token
+    });
+
     const dispatch = useDispatch();
 
     useGSAP(() => {
@@ -45,6 +52,24 @@ function ShowAllUserModal() {
         });
     }
 
+    function addNewContact(id: string) {
+        const config = {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        };
+        const body = {
+            contact: id
+        }
+        AxiosVite.post("/users/contact", body, config).then((response: any) => {
+            dispatch(AddNewContact(id));
+            CloseModal()
+        }).catch((err) => {
+            console.log(err)
+        });
+    }
+
     return (
         <div className="modal-container h-screen w-full bg-black/25 fixed top-0 z-50 flex justify-center items-center">
             <div className="contact-modal origin-center overflow-hidden w-[550px] h-[550px] bg-white shadow-xl rounded-xl flex flex-col">
@@ -60,11 +85,11 @@ function ShowAllUserModal() {
                     {
                         ContactData.map((item: any, index: number) => {
                             return (
-                                <div key={index} className="w-full flex hover:bg-zinc-200 p-2 rounded-lg">
+                                <div onClick={() => addNewContact(item._id)} key={index} className="w-full flex hover:bg-zinc-200 active:bg-transparent p-2 rounded-lg">
                                     <img src="../profile.jpg" className="w-15 h-15 rounded-full shrink-0 object-cover" />
                                     <div className="flex justify-between w-full p-2">
                                         <div className="">
-                                            <p className="font-medium text-sm">{item.name}</p>
+                                            <p className="font-medium text-sm">{item.firstname}{" "}{item.lastname}</p>
                                             <p className="text-[13px]">description</p>
                                         </div>
                                     </div>

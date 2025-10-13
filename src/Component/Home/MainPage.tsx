@@ -9,6 +9,7 @@ import { useEffect, useRef, useState } from "react";
 import type { RootState } from "../../redux/Store";
 
 
+
 function MainPage() {
     const dispatch = useDispatch();
     const OptionRef: any = useRef(null);
@@ -31,9 +32,10 @@ function MainPage() {
             document.removeEventListener("mousedown", handler);
         }
     }, [showOption]);
+
     return (
         <div className={`shrink-0 w-full md:w-[350px] relative lg:w-[450px] xl:w-[510px] h-full ${recipientName ? "hidden md:flex" : "flex"} flex-col`}>
-            <div className="w-full flex justify-between items-center px-4 py-2 shrink-0">
+            <div className="w-full flex justify-between items-center px-4 py-3 shrink-0">
                 <p className="font-bold text-[22px] leading-[0.8]"> ChatApp</p>
                 <div className="flex gap-10">
                     <button onClick={() => dispatch(setShowContactModal())} className="hover:bg-zinc-200 p-2 rounded-full active:bg-zinc-100">
@@ -45,7 +47,7 @@ function MainPage() {
                         </button>
                         {
                             showOption &&
-                            <div ref={OptionRef} className="absolute top-9 right-0 md:left-0 p-4 flex flex-col gap-2 rounded-md drop-shadow-2xl bg-white">
+                            <div ref={OptionRef} className="absolute top-9 right-0 md:left-0 p-4 flex flex-col gap-2 rounded-md drop-shadow-2xl bg-white w-[200px]">
                                 <button className="flex active:bg-transparent text-sm gap-2 items-center pr-8 py-2 pl-2 rounded-md text-nowrap hover:bg-zinc-100">
                                     <BiCheckSquare />
                                     Select Chats

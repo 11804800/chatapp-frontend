@@ -3,7 +3,7 @@ import { FaUser } from "react-icons/fa"
 import { MdOutlineEdit } from "react-icons/md";
 import { useNavigate } from "react-router";
 
-function ProfileSetup() {
+function ProfileSetup({ setAccountCreated }) {
     const [name, setName] = useState<string>("Nikhil Pathak");
     const [about, setAbout] = useState<string>("");
     const [Image, setImage] = useState(null);

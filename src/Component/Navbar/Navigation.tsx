@@ -1,46 +1,50 @@
 import { IoSettingsOutline } from "react-icons/io5";
-import { BsChatLeftTextFill,BsChatLeftText } from "react-icons/bs";
 import { MdSettings } from "react-icons/md"
 import { useLocation, useNavigate } from "react-router"
-import { FaUser,FaRegUser } from "react-icons/fa";
+import { FaUser, FaRegUser } from "react-icons/fa";
 
 function Navigation() {
     const { pathname } = useLocation();
     const navigate = useNavigate();
 
     return (
-        <div className=" bg-white w-full border-t md:w-fit md:border-r-[1px] border-zinc-200 flex flex-row md:flex-col justify-between h-fit md:h-full px-2">
-            <div className="md:py-4 flex flex-row md:flex-col gap-4 p-2 justify-around md:justify-normal w-1/2 md:w-full">
-                <button onClick={() => navigate("/")} className={`${pathname == "/" ? "bg-zinc-200" : "bg-transparent text-zinc-500"} hover:bg-zinc-200 p-3 rounded-full active:bg-white flex justify-center w-fit h-fit`}>
+        <div className="bg-white w-full border-t md:w-fit md:border-r-[1px] border-zinc-200 flex flex-row md:flex-col justify-between h-fit md:h-full px-2">
+            <div className=" md:py-4 flex flex-row md:flex-col gap-4 p-2 justify-around md:justify-normal w-1/2 md:w-full">
+                <button onClick={() => navigate("/")} className={`${pathname == "/" ? "bg-zinc-200" : "bg-transparent text-[#6d6d6d]"} hover:bg-zinc-200 p-3 rounded-full active:bg-white flex justify-center w-fit h-fit relative`}>
                     {
                         pathname == "/"
                             ?
-                            <BsChatLeftTextFill size={21}/>
+                            <img src="../message-black.png" className="w-6 h-6 object-contain" />
                             :
-                            <BsChatLeftText  size={21} />
+                            <img src="../message.png" className="w-6 h-6 object-contain" />
                     }
+                    <span className="h-[8px] w-[8px] bg-green-700 rounded-full absolute right-1"></span>
                 </button>
-                <button onClick={() => navigate("/status")} className={`${pathname == "/status" ? "bg-zinc-200" : "bg-transparent"} hover:bg-zinc-200 p-3 w-fit rounded-full active:bg-white flex justify-center h-fit`}>
-                    <span className={`border-2 p-[3px] rounded-full block border-dashed w-fit ${pathname == "/status" ? "" : "border-zinc-600"}`}>
-                        <span className={`border-2 p-1 w-4 h-4 block rounded-full shrink-0 ${pathname == "/status" ? "bg-black" : "border-zinc-600"}`}></span>
-                    </span>
+                <button onClick={() => navigate("/status")} className={`${pathname == "/status" ? "bg-zinc-200" : "bg-transparent"} hover:bg-zinc-200 p-3 w-fit rounded-full active:bg-white flex justify-center h-fit relative`}>
+                    {
+                        pathname == "/status" ?
+                            <img src="../Status-black.png" className="w-6" />
+                            :
+                            <img src="../Status.png" className="w-6" />
+                    }
+                    <span className="h-[8px] w-[8px] bg-green-700 rounded-full absolute right-1"></span>
                 </button>
             </div>
             <div className="flex flex-row md:flex-col gap-4 md:py-8 p-2 justify-around md:justify-normal w-1/2 md:w-full">
-                <button onClick={() => navigate("/setting")} className={`${pathname == "/setting" ? "bg-zinc-200" : "bg-transparent text-zinc-500"} w-fit hover:bg-zinc-200 p-3 rounded-full active:bg-white shrink-0 flex justify-center h-fit`}>
+                <button onClick={() => navigate("/setting")} className={`${pathname == "/setting" ? "bg-zinc-200" : "bg-transparent text-[#6d6d6d]"} w-fit hover:bg-zinc-200 p-3 rounded-full active:bg-white shrink-0 flex justify-center h-fit relative`}>
                     {
                         pathname != "/setting" ?
-                            <IoSettingsOutline size={21}/>
+                            <IoSettingsOutline size={23} />
                             :
-                            <MdSettings size={23} />
+                            <MdSettings size={26} />
                     }
                 </button>
-                <button onClick={() => navigate("/dashboard")} className={`${pathname == "/dashboard" ? "bg-zinc-200" : "bg-transparent"} hover:bg-zinc-200 p-3 w-fit rounded-full active:bg-white flex justify-center shrink-0 h-fit`}>
+                <button onClick={() => navigate("/dashboard")} className={`${pathname == "/dashboard" ? "bg-zinc-200" : "bg-transparent text-[#6d6d6d]"} hover:bg-zinc-200 p-3 w-fit rounded-full active:bg-white flex justify-center shrink-0 h-fit relative`}>
                     {
                         pathname == "/dashboard" ?
-                        <FaUser size={21}/>
-                        :
-                        <FaRegUser size={21}/>
+                            <FaUser size={21} />
+                            :
+                            <FaRegUser size={21} />
                     }
                 </button>
             </div>

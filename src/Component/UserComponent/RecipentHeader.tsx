@@ -17,6 +17,14 @@ function RecipentHeader() {
     return state.user.recipientName
   });
 
+
+  const contact: any = useSelector((state: RootState) => {
+    return state.contact.Data
+  });
+
+  const ReciverData = contact.find((item: any) => item._id == recipientName);
+
+
   const [showOptionsOpen, setShowOptions] = useState(false);
 
   function OpenOptionModal() {
@@ -39,17 +47,17 @@ function RecipentHeader() {
 
   return (
     <div className="shrink-0 w-full p-2 flex items-center shadow-lg">
-      <button className="flex md:hidden" onClick={()=>dispatch(setRecipientName(""))}>
+      <button className="flex md:hidden" onClick={() => dispatch(setRecipientName(""))}>
         <BiArrowBack size={24} />
       </button>
       <img src="../profile.jpg" className="w-15 h-15 rounded-full shrink-0 p-1 object-cover" />
       <div className="flex justify-between p-2 w-full">
         <div className="flex flex-col">
-          <p className="font-medium">{recipientName}</p>
+          <p className="font-medium">{ReciverData.firstname}{" "}{ReciverData.lastname}</p>
           <button className="text-[12px] text-teal-600 hover:text-green-700 active:text-[brown]">click here for contact info</button>
         </div>
         <div className="flex gap-10">
-          <button className="px-3 shrink-0 py-2 active:bg-transparent hover:bg-zinc-200 rounded-full md:flex hidden items-center"><IoSearchSharp  size={21}/></button>
+          <button className="px-3 shrink-0 py-2 active:bg-transparent hover:bg-zinc-200 rounded-full md:flex hidden items-center"><IoSearchSharp size={21} /></button>
           <div className="relative flex items-center">
             <button onClick={OpenOptionModal} className="px-2 py-2 active:bg-transparent hover:bg-zinc-200 rounded-full">
               <BsThreeDotsVertical size={21} />

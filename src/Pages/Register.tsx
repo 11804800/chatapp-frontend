@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react"
-import { Link, useNavigate } from "react-router"
+import { Link } from "react-router"
 import Loading from "../Component/Authentication/Loading.js";
 import { AxiosVite } from "../utils/Axios.js";
 import { useDispatch } from "react-redux";
-import { setToken, setUserData } from "../redux/User.js";
+import { setToken, SetUser } from "../redux/User.js";
 import ProfileSetup from "../Component/Authentication/ProfileSetup.js";
 
 interface User {
@@ -15,11 +15,11 @@ interface User {
 
 function Register() {
 
-  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const [loading, setLoading] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
+  const [AccountCreated, setAccountCreated] = useState(false);
 
   useEffect(() => {
     function SetTitle() {
@@ -56,11 +56,11 @@ function Register() {
     setLoading(true);
     AxiosVite.post("/users/register", body)
       .then((response: any) => {
-        dispatch(setUserData(user));
+        dispatch(SetUser(user));
         dispatch(setToken(response.data.token));
-        localStorage.setItem("token", JSON.stringify(response.data.token));
+        localStorage.setItem("token", response.data.token);
         setLoading(false);
-        navigate("/");
+        setAccountCreated(true);
       }).catch((err: any) => {
         setLoading(false);
         setFormError(err.response.data.message.message);
@@ -126,7 +126,10 @@ function Register() {
           <p>Here</p>
         </div>
       </div>
-      <ProfileSetup />
+      {
+        AccountCreated &&
+        <ProfileSetup setAccountCreated={setAccountCreated} />
+      }
     </div>
   )
 }
