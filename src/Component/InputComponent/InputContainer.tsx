@@ -6,6 +6,7 @@ import type { RootState } from "../../redux/Store";
 import { useContext, useState } from "react";
 import { addNewMessage } from "../../redux/message";
 import { SocketContext } from "../../SocketProvider/SockerProvider";
+import { setLastMessage } from "../../redux/User";
 
 function InputContainer() {
 
@@ -24,10 +25,12 @@ function InputContainer() {
     const body = {
       message: message,
       consumer: Reciver,
-      publisher: userData?._id
+      publisher: userData?._id,
+      sent: false
     }
     socket.emit("send-message", body);
     dispatch(addNewMessage(body));
+    dispatch(setLastMessage({ id: Reciver, message: message }));
     setMessage("");
   }
 

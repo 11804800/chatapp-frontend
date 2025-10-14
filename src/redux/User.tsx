@@ -42,11 +42,36 @@ const UserSlice = createSlice({
             state.contact = action.payload
         },
         AddNewContact: (state, action: PayloadAction<any>) => {
-            state.contact.push(action.payload);
+            const isExist = state.contact.some((item: any) => item.userId._id == action.payload.userId._id);
+            if (!isExist) {
+                state.contact.push(action.payload);
+            }
+        },
+        setLastMessage: (state, action: PayloadAction<any>) => {
+            const index = state.contact.findIndex((item: any) => item.userId._id == action.payload.id);
+            state.contact[index].lastMessage = action.payload.message;
+        },
+        updateLastMessage: (state, action: PayloadAction<any>) => {
+            const index = state.contact.findIndex((item: any) => item.userId._id == action.payload.id);
+            state.contact[index].lastMessage = action.payload.message;
+            state.contact[index].unseenmessagecount = state.contact[index].unseenmessagecount + 1;
+        },
+        setUnseenMessageCount: (state, action: PayloadAction<any>) => {
+            const index = state.contact.findIndex((item: any) => item.userId._id == action.payload);
+            state.contact[index].unseenmessagecount = 0;
+        },
+        removeContact: (state, action: PayloadAction<any>) => {
+            const { index } = action.payload;
+            console.log(state.contact.find((item: any, i: number) => i == index));
+        }
+        ,
+        Logout: (state) => {
+            localStorage.removeItem('token');
+            state.token = null;
         }
     }
 })
 
 
 export default UserSlice.reducer;
-export const { SetUser, setToken, setRecipientName, setUserData, AddNewContact, setContact } = UserSlice.actions;
+export const { SetUser, setToken, setRecipientName, setUserData, AddNewContact, setContact, Logout, removeContact, updateLastMessage, setUnseenMessageCount, setLastMessage } = UserSlice.actions;

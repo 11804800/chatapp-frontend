@@ -1,17 +1,38 @@
 import { TiTimes } from "react-icons/ti"
 import { useDispatch, useSelector } from "react-redux"
 import type { RootState } from "../../redux/Store"
-import { setShowContactModal } from "../../redux/Contact";
+import { setContactData, setShowContactModal } from "../../redux/Contact";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
-import { AddNewContact } from "../../redux/User";
+import { AddNewContact, setRecipientName } from "../../redux/User";
 import { AxiosVite } from "../../utils/Axios";
+import { useEffect, useState } from "react";
 
 function ShowAllUserModal() {
+
+    const [Loading, setLoading] = useState(false);
 
     const ContactData = useSelector((state: RootState) => {
         return state.contact.Data
     });
+
+    useEffect(() => {
+        async function FetchAllUser() {
+            if (token && ContactData.length <= 0) {
+                setLoading(true);
+                AxiosVite.get("/users/all").then((response: any) => {
+                    dispatch(setContactData(response.data.data));
+                    setLoading(false);
+                }).catch((err: any) => {
+                    console.log(err.response.data);
+                    setLoading(false);
+                })
+            }
+        }
+        FetchAllUser();
+    }, []);
+
+
 
     const token = useSelector((state: RootState) => {
         return state.user.token
@@ -52,7 +73,9 @@ function ShowAllUserModal() {
         });
     }
 
+
     function addNewContact(id: string) {
+        const FilterData: any = ContactData.find((item: any) => item._id == id);
         const config = {
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -63,44 +86,64 @@ function ShowAllUserModal() {
             contact: id
         }
         AxiosVite.post("/users/contact", body, config).then((response: any) => {
-            dispatch(AddNewContact(id));
+            dispatch(setRecipientName(id));
+            dispatch(AddNewContact({
+                unseenmessagecount: 0,
+                userId: {
+                    firstname: FilterData.firstname,
+                    lastname: FilterData.lastname,
+                    _id: FilterData._id,
+                    socket_id: FilterData.socket_id
+                }
+            }));
             CloseModal()
         }).catch((err) => {
             console.log(err)
         });
     }
 
-    return (
-        <div className="modal-container h-screen w-full bg-black/25 fixed top-0 z-50 flex justify-center items-center">
-            <div className="contact-modal origin-center overflow-hidden w-[550px] h-[550px] bg-white shadow-xl rounded-xl flex flex-col">
-                <div className="flex justify-between w-full py-4 px-4">
-                    <h1 className="text-xl font-medium">
-                        Select Contact
-                    </h1>
-                    <button className="text-2xl" onClick={CloseModal}>
-                        <TiTimes />
-                    </button>
-                </div>
-                <div className="px-4 py-2 overflow-y-auto Scroll-Container">
-                    {
-                        ContactData.map((item: any, index: number) => {
-                            return (
-                                <div onClick={() => addNewContact(item._id)} key={index} className="w-full flex hover:bg-zinc-200 active:bg-transparent p-2 rounded-lg">
-                                    <img src="../profile.jpg" className="w-15 h-15 rounded-full shrink-0 object-cover" />
-                                    <div className="flex justify-between w-full p-2">
-                                        <div className="">
-                                            <p className="font-medium text-sm">{item.firstname}{" "}{item.lastname}</p>
-                                            <p className="text-[13px]">description</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            )
-                        })
-                    }
+    if (Loading) {
+        return (
+            <div className="modal-container h-screen w-full bg-black/25 fixed top-0 z-50 flex justify-center items-center p-4">
+                <div className="contact-modal origin-center overflow-hidden w-[550px] h-[550px] bg-white shadow-xl rounded-xl flex flex-col justify-center items-center">
+                    <p>Loading...</p>
                 </div>
             </div>
-        </div>
-    )
+        )
+    }
+    else {
+        return (
+            <div className="modal-container h-screen w-full bg-black/25 fixed top-0 z-50 flex justify-center items-center p-4">
+                <div className="contact-modal origin-center overflow-hidden w-[550px] h-[550px] bg-white shadow-xl rounded-xl flex flex-col">
+                    <div className="flex justify-between w-full py-4 px-4">
+                        <h1 className="text-xl font-medium">
+                            Select Contact
+                        </h1>
+                        <button className="text-2xl" onClick={CloseModal}>
+                            <TiTimes />
+                        </button>
+                    </div>
+                    <div className="px-4 py-2 overflow-y-auto Scroll-Container">
+                        {
+                            ContactData.map((item: any, index: number) => {
+                                return (
+                                    <div onClick={() => addNewContact(item._id)} key={index} className="w-full flex hover:bg-zinc-200 active:bg-transparent p-2 rounded-lg">
+                                        <img src="../profile.jpg" className="w-15 h-15 rounded-full shrink-0 object-cover" />
+                                        <div className="flex justify-between w-full p-2">
+                                            <div className="">
+                                                <p className="font-medium text-sm">{item.firstname}{" "}{item.lastname}</p>
+                                                <p className="text-[13px]">description</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )
+                            })
+                        }
+                    </div>
+                </div>
+            </div>
+        )
+    }
 }
 
 export default ShowAllUserModal

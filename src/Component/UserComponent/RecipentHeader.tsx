@@ -31,6 +31,9 @@ function RecipentHeader() {
     setShowOptions(true);
   }
 
+
+
+
   useEffect(() => {
     if (!showOptionsOpen) return;
     const handler = (e: any) => {
@@ -53,8 +56,8 @@ function RecipentHeader() {
       <img src="../profile.jpg" className="w-15 h-15 rounded-full shrink-0 p-1 object-cover" />
       <div className="flex justify-between p-2 w-full">
         <div className="flex flex-col">
-          <p className="font-medium">{ReciverData.firstname}{" "}{ReciverData.lastname}</p>
-          <button className="text-[12px] text-teal-600 hover:text-green-700 active:text-[brown]">click here for contact info</button>
+          <p className="font-medium line-clamp-1">{ReciverData?.firstname}{" "}{ReciverData?.lastname}</p>
+          <button className="line-clamp-1 text-[12px] text-teal-600 hover:text-green-700 active:text-[brown]">click here for contact info</button>
         </div>
         <div className="flex gap-10">
           <button className="px-3 shrink-0 py-2 active:bg-transparent hover:bg-zinc-200 rounded-full md:flex hidden items-center"><IoSearchSharp size={21} /></button>

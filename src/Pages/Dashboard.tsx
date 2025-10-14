@@ -1,21 +1,27 @@
-import {  useState } from "react";
+import { useState } from "react";
 import { FaUser } from "react-icons/fa"
 import { MdOutlineEdit, MdLogout } from "react-icons/md";
 import { IoCheckmarkSharp } from "react-icons/io5";
+import { useDispatch, useSelector } from "react-redux";
+import type { RootState } from "../redux/Store";
+import { Logout } from "../redux/User";
 function Dashboard() {
 
+  const dispatch = useDispatch();
   const [EditName, setEditName] = useState(false);
   const [EditDescription, setEditDescription] = useState(false);
   const [name, setName] = useState<string>("Nikhil pathak");
   const [Description, setDescription] = useState("Hey There I am using what's app");
 
-  function UpdateName()
-  {
+  const token = useSelector((state: RootState) => {
+    return state.user.token
+  });
+
+  function UpdateName() {
     setEditName(false);
   }
 
-  function UpdateDescription()
-  {
+  function UpdateDescription() {
     setEditDescription(false);
   }
 
@@ -37,13 +43,13 @@ function Dashboard() {
                   <p className="w-full font-medium">
                     Nikhil Pathak
                   </p>
-                  <button onClick={()=>setEditName(true)} className="text-zinc-600 hover:bg-zinc-100 active:bg-white p-2 rounded-full w-fit h-fit">
+                  <button onClick={() => setEditName(true)} className="text-zinc-600 hover:bg-zinc-100 active:bg-white p-2 rounded-full w-fit h-fit">
                     <MdOutlineEdit size={24} />
                   </button>
                 </>
                 :
                 <>
-                  <input  type="text" value={name} onChange={(e) => setName(e.target.value)} className="outline-none font-medium border-b w-full" />
+                  <input type="text" value={name} onChange={(e) => setName(e.target.value)} className="outline-none font-medium border-b w-full" />
                   <button onClick={UpdateName} className="text-zinc-600 hover:bg-zinc-100 active:bg-white p-2 rounded-full w-fit h-fit">
                     <IoCheckmarkSharp size={24} />
                   </button>
@@ -61,13 +67,13 @@ function Dashboard() {
                 ?
                 <>
                   <p className="w-full text-black font-medium">Hey I am Using Chat app</p>
-                  <button onClick={()=>setEditDescription(true)} className="text-zinc-600 hover:bg-zinc-100 active:bg-white p-2 rounded-full w-fit h-fit">
+                  <button onClick={() => setEditDescription(true)} className="text-zinc-600 hover:bg-zinc-100 active:bg-white p-2 rounded-full w-fit h-fit">
                     <MdOutlineEdit size={24} />
                   </button>
                 </>
                 :
                 <>
-                  <input  type="text" value={Description} onChange={(e) => setDescription(e.target.value)} className="outline-none font-medium border-b w-full" />
+                  <input type="text" value={Description} onChange={(e) => setDescription(e.target.value)} className="outline-none font-medium border-b w-full" />
                   <button onClick={UpdateDescription} className="text-zinc-600 hover:bg-zinc-100 active:bg-white p-2 rounded-full w-fit h-fit">
                     <IoCheckmarkSharp size={24} />
                   </button>
@@ -76,7 +82,7 @@ function Dashboard() {
           </div>
         </div>
         <div className="absolute bottom-0 py-10">
-          <button className="flex items-center gap-1 font-medium border-[1px] px-2 py-1 rounded-md hover:bg-zinc-100 hover:border-zinc-100 active:bg-white">
+          <button onClick={() => dispatch(Logout())} className="flex items-center gap-1 font-medium border-[1px] px-2 py-1 rounded-md hover:bg-zinc-100 hover:border-zinc-100 active:bg-white">
             <MdLogout />Logout</button>
         </div>
       </div>

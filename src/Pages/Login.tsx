@@ -133,9 +133,9 @@ function Login() {
           </button>
         </div>
         <div className="text-[13px] text-slate-600 font-medium flex gap-1 py-2">
-          <p>Don't have an account yet?</p>
-          <Link to="/signup" className="active:text-[brown] hover:text-blue-700">Sign Up</Link>
-          <p>for free</p>
+          <p className="text-nowrap">Don't have an account yet?</p>
+          <Link to="/signup" className="active:text-[brown] hover:text-blue-700 text-nowrap">Sign Up</Link>
+          <p className="text-nowrap">for free</p>
         </div>
       </div>
     </div>

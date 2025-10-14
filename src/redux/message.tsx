@@ -22,9 +22,29 @@ const MessageSlice = createSlice({
         },
         toggleSelectMessage: (state) => {
             state.selectMessage = !state.selectMessage
+        },
+        updateMessage: (state, action: PayloadAction<any>) => {
+            const index = state.messages.findIndex((item: any) => item.sent == false && item.consumer == action.payload.consumer && item.publisher == action.payload.publisher);
+            state.messages[index] = action.payload;
+        },
+        updateRecived: (state, action: PayloadAction<any>) => {
+            state.messages = state.messages.map((item: any) => {
+                if (item.consumer == action.payload) {
+                    return { ...item, recived: true };
+                }
+                return item;
+            });
+        },
+        updateSeen: (state, action: PayloadAction<any>) => {
+            state.messages = state.messages.map((item: any) => {
+                if (item.consumer == action.payload) {
+                    return { ...item, seen: true };
+                }
+                return item;
+            });
         }
     }
 })
 
 export default MessageSlice.reducer;
-export const { setMessage, addNewMessage, toggleSelectMessage } = MessageSlice.actions;
+export const { setMessage, addNewMessage, toggleSelectMessage, updateMessage, updateSeen, updateRecived } = MessageSlice.actions;

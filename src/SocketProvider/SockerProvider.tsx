@@ -4,7 +4,6 @@ import { AxiosVite } from "../utils/Axios";
 import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "../redux/Store";
 import { setContact, setUserData } from "../redux/User";
-import { setContactData } from "../redux/Contact";
 
 
 type SocketProviderProps = {
@@ -35,24 +34,21 @@ function SockerProvider({ children }: SocketProviderProps) {
         };
         AxiosVite.get("/users", config).then((response: any) => {
           dispatch(setContact(response.data.data.contact));
-          dispatch(setUserData(response.data.data));
-        }).catch((err: any) => {
-          console.log(err.response.data);
-        })
-      }
-    }
-    async function FetchAllUser() {
-      if (token) {
-        AxiosVite.get("/users/all").then((response: any) => {
-          dispatch(setContactData(response.data.data));
+          dispatch(setUserData({
+            _id: response.data.data._id,
+            firstname: response.data.data._id,
+            lastname: response.data.data.lastname,
+            username: response.data.data.username,
+            socket_id: response.data.data?.socket_id,
+            image: response.data.data?.image
+          }));
         }).catch((err: any) => {
           console.log(err.response.data);
         })
       }
     }
     FetchUser();
-    FetchAllUser();
-  }, []);
+  }, [token]);
 
   const socket: any = io(ENDPOINTS);
   return (

@@ -3,10 +3,10 @@ import { useSelector } from "react-redux"
 import type { RootState } from "../../redux/Store"
 import { useState } from "react";
 import MessageOption from "./MessageOption";
+import { CiClock2 } from "react-icons/ci";
+import { BsCheck2All } from "react-icons/bs";
+
 function RenderMessage({ item }: any) {
-
-
-
 
   const userData: any = useSelector((state: RootState) => {
     return state.user.userData
@@ -55,7 +55,27 @@ function RenderMessage({ item }: any) {
             <p className="px-2">{item.message}</p>
             <div className="flex gap-[2px] relative -bottom-1 h-full items-center px-2">
               <p className="text-[10px]">12:04</p>
-              <BiCheck />
+              {
+                !item.sent ?
+                  <span>
+                    <CiClock2 size={10} />
+                  </span>
+                  :
+                  <>
+                    {
+                      item?.recived
+                        ?
+                        <>
+                          {
+                            item?.seen ?
+                              <BsCheck2All color="blue" /> :
+                              <BsCheck2All />
+                          }
+                        </>
+                        : <BiCheck />
+                    }
+                  </>
+              }
             </div>
           </div>
           <div className="rotate-45 -translate-x-[8px] -translate-y-1.5 w-[12px] h-[12px] bg-[#d9fdd3] rounded"></div>
