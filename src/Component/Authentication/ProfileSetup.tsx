@@ -1,16 +1,20 @@
 import { useEffect, useRef, useState } from "react"
 import { FaUser } from "react-icons/fa"
 import { MdOutlineEdit } from "react-icons/md";
-import { useNavigate } from "react-router";
+import { AxiosVite } from "../../utils/Axios";
+import { useDispatch } from "react-redux";
+import { setToken, SetUser } from "../../redux/User";
+import Loading from "./Loading";
 
-function ProfileSetup({ setAccountCreated }) {
-    const [name, setName] = useState<string>("Nikhil Pathak");
+function ProfileSetup({ setAccountCreated }: any) {
+    const [loading, setLoading] = useState(false);
+    const [name, setName] = useState<string>("");
     const [about, setAbout] = useState<string>("");
     const [Image, setImage] = useState(null);
     const [FileUploadError, setFileUploadError] = useState<string | null>(null);
     const ImageUploadRef: any = useRef(null);
-
-    const navigate = useNavigate();
+    const token: any = localStorage.getItem("token");
+    const dispatch = useDispatch();
 
     useEffect(() => {
         if (FileUploadError) {
@@ -35,6 +39,32 @@ function ProfileSetup({ setAccountCreated }) {
         }
 
     }
+
+    function UpdateProfile() {
+        setLoading(true);
+        const formdata: any = new FormData();
+        const fullname: any = name.split(" ");
+        formdata.append("profile-image", Image);
+        formdata.append("description", about);
+        formdata.append("firstname", fullname[0]);
+        formdata.append("lastname", fullname[1]);
+        AxiosVite.put("/users", formdata, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                "Authorization": `Bearer ${token}`
+            }
+        }).then((response) => {
+            dispatch(setToken(token));
+            dispatch(SetUser(response.data.data));
+            setLoading(false);
+            setAccountCreated(false);
+        }).catch((err: any) => {
+            console.log(err);
+            setLoading(false);
+        })
+    }
+
+
     return (
         <>
             <div className="w-full absolute top-0 left-0 h-screen flex justify-center items-center bg-white">
@@ -65,8 +95,14 @@ function ProfileSetup({ setAccountCreated }) {
                         </div>
                     </div>
                     <div className="pt-6 px-2 flex justify-end w-full">
-                        <button onClick={() => { navigate('/') }} className="hover:bg-black/85 active:bg-black active:shadow-none bg-black text-white font-medium px-4 py-2 rounded-md shadow-xl">
-                            Proceed
+                        <button onClick={UpdateProfile} className="hover:bg-black/85 active:bg-black active:shadow-none bg-black text-white font-medium px-4 py-2 rounded-md shadow-xl flex justify-center items-center">
+                            {
+                                loading
+                                    ?
+                                    <Loading />
+                                    :
+                                    "Proceed"
+                            }
                         </button>
                     </div>
                 </div>

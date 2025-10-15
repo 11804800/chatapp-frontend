@@ -3,7 +3,7 @@ import { Link } from "react-router"
 import Loading from "../Component/Authentication/Loading.js";
 import { AxiosVite } from "../utils/Axios.js";
 import { useDispatch } from "react-redux";
-import { setToken, SetUser } from "../redux/User.js";
+import { SetUser } from "../redux/User.js";
 import ProfileSetup from "../Component/Authentication/ProfileSetup.js";
 
 interface User {
@@ -45,19 +45,17 @@ function Register() {
 
   function SubmitForm(e: any) {
 
+    e.preventDefault();
     const body: object = {
       username: user.username,
       password: user.password,
       firstname: user.firstname,
       lastname: user.lastname
     }
-    console.log(user);
-    e.preventDefault();
     setLoading(true);
     AxiosVite.post("/users/register", body)
       .then((response: any) => {
         dispatch(SetUser(user));
-        dispatch(setToken(response.data.token));
         localStorage.setItem("token", response.data.token);
         setLoading(false);
         setAccountCreated(true);

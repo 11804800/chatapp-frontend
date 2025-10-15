@@ -3,8 +3,17 @@ import { MdLogout, MdSettings } from "react-icons/md"
 import { MdLockOutline } from "react-icons/md";
 import PrivacyComponent from "../Component/SettingComponent/PrivacyComponent";
 import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Logout } from "../redux/User";
+import type { RootState } from "../redux/Store";
 
 function SettingPage() {
+  const dispatch = useDispatch();
+
+  const userData: any = useSelector((state: RootState) => {
+    return state.user.userData
+  });
+
   const [PrivacyPageActive, setPrivacyPageActive] = useState(false);
   return (
     <div className="flex p-2 w-full h-full">
@@ -16,7 +25,7 @@ function SettingPage() {
               <FaUser size={34} />
             </div>
             <div className="px-2 flex flex-col gap-1">
-              <p className="text-sm font-medium">Nikhil Pathak</p>
+              <p className="text-sm font-medium">{userData?.firstname}{" "}{userData?.lastname}</p>
               <p className="text-sm text-zinc-500">Hey there! i am using whatsapp</p>
             </div>
           </div>
@@ -32,7 +41,7 @@ function SettingPage() {
                 </p>
               </div>
             </div >
-            <button className="hover:bg-zinc-100 active:bg-white rounded-md px-3 py-4 flex items-center gap-4">
+            <button onClick={() => dispatch(Logout())} className="hover:bg-zinc-100 active:bg-white rounded-md px-3 py-4 flex items-center gap-4">
               <span className="text-zinc-500">
                 <MdLogout size={24} />
               </span>

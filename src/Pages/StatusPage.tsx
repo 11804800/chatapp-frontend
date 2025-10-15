@@ -3,6 +3,8 @@ import { FiPlusCircle } from "react-icons/fi";
 import { IoMdPhotos } from "react-icons/io";
 import { useEffect, useRef, useState } from "react";
 import StatusUpload from "../Component/SettingComponent/StatusUpload";
+import { useSelector } from "react-redux";
+import type { RootState } from "../redux/Store";
 function StatusPage() {
 
   const [StatusOptionActive, setStatusOptionActive] = useState<boolean>(false);
@@ -11,6 +13,11 @@ function StatusPage() {
   const StatusOptionRef: any = useRef(null);
   const StatusUploadInputRef: any = useRef(null);
   const [File, setFile] = useState(null);
+
+  const Contact: any = useSelector((state: RootState) => {
+    return state.user.contact
+  });
+
 
   useEffect(() => {
     if (!StatusOptionActive) return;
@@ -89,24 +96,21 @@ function StatusPage() {
           </div>
           <div className="overflow-y-auto h-full p-2 flex flex-col gap-4">
             <h1 className="font-medium">Recent</h1>
-            <div className="flex px-2 items-center gap-4 hover:bg-zinc-100 py-2 rounded-md">
-              <img src="../profile.jpg" className="w-14 h-14 object-cover rounded-full" />
-              <div>
-                <p>Nikhil</p>
-                <p className="text-zinc-500 text-sm">
-                  Today at 07:09
-                </p>
-              </div>
-            </div>
-            <div className="flex px-2 items-center gap-4 hover:bg-zinc-100 py-2 rounded-md">
-              <img src="../profile.jpg" className="w-14 h-14 object-cover rounded-full" />
-              <div>
-                <p>Nikhil</p>
-                <p className="text-zinc-500 text-sm">
-                  Today at 07:09
-                </p>
-              </div>
-            </div>
+            {
+              Contact.map((item: any) => {
+                return (
+                  <div key={item._id} className="flex px-2 items-center gap-4 hover:bg-zinc-100 py-2 rounded-md">
+                    <img src="../profile.jpg" className="w-14 h-14 object-cover rounded-full" />
+                    <div>
+                      <p>{item?.userId?.firstname}{" "}{item?.userId?.lastname}</p>
+                      <p className="text-zinc-500 text-sm">
+                        Today at 07:09
+                      </p>
+                    </div>
+                  </div>
+                )
+              })
+            }
           </div>
           {
             FileUploadError &&

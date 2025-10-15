@@ -25,7 +25,7 @@ function SockerProvider({ children }: SocketProviderProps) {
 
   useEffect(() => {
     async function FetchUser() {
-      if (token) {
+      if (token != null) {
         const config = {
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -36,11 +36,12 @@ function SockerProvider({ children }: SocketProviderProps) {
           dispatch(setContact(response.data.data.contact));
           dispatch(setUserData({
             _id: response.data.data._id,
-            firstname: response.data.data._id,
+            firstname: response.data.data.firstname,
             lastname: response.data.data.lastname,
             username: response.data.data.username,
             socket_id: response.data.data?.socket_id,
-            image: response.data.data?.image
+            image: response.data.data?.image,
+            description: response.data?.data?.description
           }));
         }).catch((err: any) => {
           console.log(err.response.data);

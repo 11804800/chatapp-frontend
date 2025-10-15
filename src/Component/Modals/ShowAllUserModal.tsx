@@ -86,17 +86,19 @@ function ShowAllUserModal() {
             contact: id
         }
         AxiosVite.post("/users/contact", body, config).then((response: any) => {
-            dispatch(setRecipientName(id));
-            dispatch(AddNewContact({
-                unseenmessagecount: 0,
-                userId: {
-                    firstname: FilterData.firstname,
-                    lastname: FilterData.lastname,
-                    _id: FilterData._id,
-                    socket_id: FilterData.socket_id
-                }
-            }));
-            CloseModal()
+            if (response) {
+                dispatch(setRecipientName(id));
+                dispatch(AddNewContact({
+                    unseenmessagecount: 0,
+                    userId: {
+                        firstname: FilterData.firstname,
+                        lastname: FilterData.lastname,
+                        _id: FilterData._id,
+                        socket_id: FilterData.socket_id
+                    }
+                }));
+                CloseModal()
+            }
         }).catch((err) => {
             console.log(err)
         });
@@ -132,7 +134,7 @@ function ShowAllUserModal() {
                                         <div className="flex justify-between w-full p-2">
                                             <div className="">
                                                 <p className="font-medium text-sm">{item.firstname}{" "}{item.lastname}</p>
-                                                <p className="text-[13px]">description</p>
+                                                <p className="text-[13px] line-clamp-1">{item?.description}</p>
                                             </div>
                                         </div>
                                     </div>
