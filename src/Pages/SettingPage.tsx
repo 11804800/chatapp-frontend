@@ -21,12 +21,17 @@ function SettingPage() {
         <h1 className="text-2xl font-medium">Settings</h1>
         <div className="flex flex-col py-4 overflow-y-auto">
           <div className="flex items-center gap-2 border-b border-zinc-400 py-5">
-            <div className="text-zinc-600 bg-zinc-100 rounded-full p-3 w-fit h-fit">
-              <FaUser size={34} />
-            </div>
+            {
+              userData?.image ?
+                <img src={import.meta.env.VITE_IMAGE_URL + userData?.image} className="w-14 h-14 rounded-full object-cover" />
+                :
+                <div className="text-zinc-600 bg-zinc-100 rounded-full p-3 w-fit h-fit">
+                  <FaUser size={34} />
+                </div>
+            }
             <div className="px-2 flex flex-col gap-1">
               <p className="text-sm font-medium">{userData?.firstname}{" "}{userData?.lastname}</p>
-              <p className="text-sm text-zinc-500">Hey there! i am using whatsapp</p>
+              <p className="text-sm text-zinc-500 capitalize">{userData?.description}</p>
             </div>
           </div>
           <div className="flex flex-col gap-8 py-2">

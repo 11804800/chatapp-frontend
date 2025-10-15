@@ -4,6 +4,7 @@ import type { RootState } from "../../redux/Store";
 import { useContext, useEffect } from "react";
 import { SocketContext } from "../../SocketProvider/SockerProvider";
 import { GetDateAndTime } from "../../utils/DateAndTimeFormat";
+import { FaUser } from "react-icons/fa";
 
 function RecipentItem({ item }: any) {
 
@@ -47,7 +48,14 @@ function RecipentItem({ item }: any) {
         <div className={`w-full flex gap-1 hover:bg-zinc-200 p-2 rounded-lg ${recipientName == item.userId._id && "bg-zinc-200"}`} onClick={() => SetRecipient(item.userId._id)}>
             {selectContact && <input type="checkbox" />}
             <div className="shrink-0 relative">
-                <img src="../profile.jpg" className="w-15 h-15 rounded-full shrink-0 object-cover" />
+                {
+                    item?.userId?.image ?
+                        <img src={import.meta.env.VITE_IMAGE_URL + item?.userId?.image} className="w-15 h-15 rounded-full shrink-0 p-1 object-cover" />
+                        :
+                        <div className="bg-zinc-200 p-3 rounded-full text-zinc-600">
+                            <FaUser size={28} />
+                        </div>
+                }
             </div>
             <div className="flex flex-col w-full p-2">
                 <div className="flex justify-between w-full items-center">

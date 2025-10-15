@@ -36,3 +36,20 @@ body {
 .clip-circle {
   clip-path: circle(50% at 50% 50%);
 }
+
+.status-container {
+  backdrop-filter: blur(15px);
+}
+
+.loading {
+  animation: filler 15s linear 0s forwards;
+}
+
+@keyframes filler {
+  0% {
+    width: 0%;
+  }
+  100% {
+    width: 100%;
+  }
+}

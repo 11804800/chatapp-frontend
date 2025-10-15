@@ -7,6 +7,7 @@ import { useGSAP } from "@gsap/react";
 import { AddNewContact, setRecipientName } from "../../redux/User";
 import { AxiosVite } from "../../utils/Axios";
 import { useEffect, useState } from "react";
+import { FaUser } from "react-icons/fa";
 
 function ShowAllUserModal() {
 
@@ -130,7 +131,15 @@ function ShowAllUserModal() {
                             ContactData.map((item: any, index: number) => {
                                 return (
                                     <div onClick={() => addNewContact(item._id)} key={index} className="w-full flex hover:bg-zinc-200 active:bg-transparent p-2 rounded-lg">
-                                        <img src="../profile.jpg" className="w-15 h-15 rounded-full shrink-0 object-cover" />
+                                        {
+                                            item.image
+                                                ?
+                                                <img src={import.meta.env.VITE_IMAGE_URL + item.image} className="w-15 h-15 rounded-full shrink-0 object-cover" />
+                                                :
+                                                <div className="py-3 px-4 text-zinc-500 bg-zinc-100 rounded-full w-fit">
+                                                    <FaUser size={28} />
+                                                </div>
+                                        }
                                         <div className="flex justify-between w-full p-2">
                                             <div className="">
                                                 <p className="font-medium text-sm">{item.firstname}{" "}{item.lastname}</p>

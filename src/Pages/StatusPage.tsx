@@ -2,9 +2,12 @@ import { FaUser } from "react-icons/fa"
 import { FiPlusCircle } from "react-icons/fi";
 import { IoMdPhotos } from "react-icons/io";
 import { useEffect, useRef, useState } from "react";
-import StatusUpload from "../Component/SettingComponent/StatusUpload";
-import { useSelector } from "react-redux";
+import StatusUpload from "../Component/StatusComponent/StatusUpload";
+import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "../redux/Store";
+import { FaCirclePlus } from "react-icons/fa6";
+import { AxiosVite } from "../utils/Axios";
+import { setMyStatus, setShowStatus, SetStatus } from "../redux/status";
 function StatusPage() {
 
   const [StatusOptionActive, setStatusOptionActive] = useState<boolean>(false);
@@ -14,9 +17,41 @@ function StatusPage() {
   const StatusUploadInputRef: any = useRef(null);
   const [File, setFile] = useState(null);
 
-  const Contact: any = useSelector((state: RootState) => {
-    return state.user.contact
+  const dispatch = useDispatch();
+
+  const userData: any = useSelector((state: RootState) => {
+    return state.user.userData
   });
+
+
+  const token = useSelector((state: RootState) => {
+    return state.user.token
+  });
+
+  const Status: any = useSelector((state: RootState) => {
+    return state.status.status
+  });
+
+  const MyStatus: any = useSelector((state: RootState) => {
+    return state.status.myStatus
+  });
+
+
+
+  useEffect(() => {
+    if (token) {
+      AxiosVite.get("/status", {
+        headers: {
+          "Authorization": `Bearer ${token}`
+        }
+      }).then((response: any) => {
+        dispatch(setMyStatus(response.data.data.status));
+        dispatch(SetStatus(response.data.data.contact));
+      }).catch((err: any) => {
+        console.log(err);
+      })
+    }
+  }, []);
 
 
   useEffect(() => {
@@ -31,7 +66,6 @@ function StatusPage() {
       document.removeEventListener('mousedown', Handler);
     }
   }, [StatusOptionActive]);
-
 
   function UploadFile(e: any) {
     const file = e.target.files[0];
@@ -58,6 +92,10 @@ function StatusPage() {
     }
   }, [FileUploadError]);
 
+
+  function SeenStatus(status: any) {
+    return status.some((item: any) => !item.seen.includes(userData?._id));
+  }
 
   return (
     <>
@@ -86,9 +124,41 @@ function StatusPage() {
             </div>
           </div>
           <div className="flex items-center gap-2  border-zinc-400 py-5 relative">
-            <div className="text-zinc-600 bg-zinc-100 rounded-full p-3 w-fit h-fit">
-              <FaUser size={34} />
-            </div>
+            {MyStatus.length >= 1 ?
+              <div onClick={() => dispatch(setShowStatus(userData?._id))} className="border-[3px] p-[2px] border-green-700  rounded-full">
+                {
+                  userData?.image ?
+                    <img src={import.meta.env.VITE_IMAGE_URL + userData?.image} className="rounded-full w-14 h-14 object-cover" /> :
+                    <div className="text-zinc-600 bg-zinc-200 rounded-full p-3 w-fit h-fit">
+                      <FaUser size={25} />
+                    </div>
+                }
+              </div>
+              :
+              <>
+                {
+                  userData?.image
+                    ?
+                    <div onClick={() => {
+                      StatusUploadInputRef.current.click()
+                    }} className="relative">
+                      <img src={import.meta.env.VITE_IMAGE_URL + userData?.image} className="rounded-full w-14 h-14 object-cover" />
+                      <span className="text-green-700 absolute bottom-0 right-0 bg-white rounded-full">
+                        <FaCirclePlus />
+                      </span>
+                    </div>
+                    :
+                    <div onClick={() => {
+                      StatusUploadInputRef.current.click()
+                    }} className="text-zinc-600 bg-zinc-100 rounded-full p-3 w-fit h-fit relative">
+                      <FaUser size={34} />
+                      <span className="text-green-700 bg-white rounded-full absolute bottom-0 right-0">
+                        <FaCirclePlus />
+                      </span>
+                    </div>
+                }
+              </>
+            }
             <div className="px-2 flex flex-col gap-1">
               <p className="text-sm font-medium">My Status</p>
               <p className="text-sm text-zinc-500">Click to add status update</p>
@@ -97,18 +167,22 @@ function StatusPage() {
           <div className="overflow-y-auto h-full p-2 flex flex-col gap-4">
             <h1 className="font-medium">Recent</h1>
             {
-              Contact.map((item: any) => {
-                return (
-                  <div key={item._id} className="flex px-2 items-center gap-4 hover:bg-zinc-100 py-2 rounded-md">
-                    <img src="../profile.jpg" className="w-14 h-14 object-cover rounded-full" />
-                    <div>
-                      <p>{item?.userId?.firstname}{" "}{item?.userId?.lastname}</p>
-                      <p className="text-zinc-500 text-sm">
-                        Today at 07:09
-                      </p>
+              Status.map((item: any) => {
+                if (item?.userId?.status?.length) {
+                  return (
+                    <div onClick={() => dispatch(setShowStatus(item?.userId?._id))} key={item._id} className="flex px-2 items-center gap-4 hover:bg-zinc-100 py-2 rounded-md">
+                      <div className={`p-[2px] ${!SeenStatus(item?.userId?.status) ? "border-zinc-400" : "border-green-700"} border-2 rounded-full`}>
+                        <img src="../profile.jpg" className="w-14 h-14 object-cover rounded-full" />
+                      </div>
+                      <div>
+                        <p>{item?.userId?.firstname}{" "}{item?.userId?.lastname}</p>
+                        <p className="text-zinc-500 text-sm">
+                          Today at 07:09
+                        </p>
+                      </div>
                     </div>
-                  </div>
-                )
+                  )
+                }
               })
             }
           </div>
@@ -120,11 +194,11 @@ function StatusPage() {
           }
         </div>
         <div className="hidden md:flex w-full justify-center items-center h-full ">
-          <div className="flex flex-col justify-center items-center gap-4">
+          <div className="flex flex-col justify-center items-center gap-4 p-3">
             <div className="w-fit text-zinc-400">
               <img src="./Status-Gray.png" className="w-14 h-14" />
             </div>
-            <h1 className="font-light text-zinc-600 text-3xl">Share Status Updates</h1>
+            <h1 className="font-light text-zinc-600 text-3xl text-nowrap">Share Status Updates</h1>
             <p className="text-center font-light text-sm">Share Photos, Videos and text that will disappear after 24 hours</p>
           </div>
         </div>

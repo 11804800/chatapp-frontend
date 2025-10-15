@@ -8,6 +8,7 @@ const Register = lazy(() => import("./Pages/Register"));
 import gsap from 'gsap';
 import { ScrollTrigger } from "gsap/all";
 import ShowAllUserModal from "./Component/Modals/ShowAllUserModal";
+import StatusView from "./Component/StatusComponent/StatusView";
 const HomeLayout = lazy(() => import("./Layout/HomeLayout"));
 const SettingPage = lazy(() => import("./Pages/SettingPage"));
 const StatusPage = lazy(() => import("./Pages/StatusPage"));
@@ -43,9 +44,16 @@ function App() {
       );
   }
 
+  const showStatus: string = useSelector((state: RootState) => {
+    return state.status.showStatus
+  });
+
 
   return (
     <>
+      {
+        showStatus && <StatusView />
+      }
       {
         showContactModal
         &&
