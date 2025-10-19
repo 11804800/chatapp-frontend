@@ -9,6 +9,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from "gsap/all";
 import ShowAllUserModal from "./Component/Modals/ShowAllUserModal";
 import StatusView from "./Component/StatusComponent/StatusView";
+import LoadingComponent from "./Component/LoadingComponent";
 const HomeLayout = lazy(() => import("./Layout/HomeLayout"));
 const SettingPage = lazy(() => import("./Pages/SettingPage"));
 const StatusPage = lazy(() => import("./Pages/StatusPage"));
@@ -61,7 +62,7 @@ function App() {
       }
       <Routes>
         <Route path="/" element={
-          <Suspense fallback={<div className="w-full h-screen flex justify-center items-center"><p>Loading...</p></div>}>
+          <Suspense fallback={<LoadingComponent />}>
             <PrivateRoute>
               <HomeLayout />
             </PrivateRoute>
@@ -73,14 +74,14 @@ function App() {
           <Route path="dashboard" element={<Dashboard />} />
         </Route>
         <Route path="/login" element={
-          <Suspense fallback={<div className="w-full h-screen flex justify-center items-center"><p>Loading...</p></div>}>
+          <Suspense fallback={<LoadingComponent />}>
             <AuthenticatedRoute>
               <Login />
             </AuthenticatedRoute>
           </Suspense>
         } />
         <Route path="/signup" element={
-          <Suspense fallback={<div className="w-full h-screen flex justify-center items-center"><p>Loading...</p></div>}>
+          <Suspense fallback={<LoadingComponent />}>
             <AuthenticatedRoute>
               <Register />
             </AuthenticatedRoute>
