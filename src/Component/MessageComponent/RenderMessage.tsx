@@ -23,7 +23,7 @@ function RenderMessage({ item }: any) {
   if (item.consumer == userData?._id) {
     return (
       <div className="w-full flex group justify-start relative">
-        <div className="self-start  flex px-2 drop-shadow relative shrink-0 overflow-hidden">
+        <div className="self-start flex px-2 drop-shadow relative shrink-0 overflow-hidden">
           <div className="rotate-45 translate-x-[8px] -translate-y-1.5 w-[12px] h-[12px] bg-white rounded"></div>
           <div className="bg-white font-medium px-2 py-1  w-fit  flex items-start rounded-md">
             <p className="px-2">{item.message}</p>

@@ -8,13 +8,13 @@ import { store } from './redux/Store.tsx'
 import SockerProvider from './SocketProvider/SockerProvider.tsx'
 
 createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <BrowserRouter>
-      <Provider store={store}>
-        <SockerProvider>
-          <App />
-        </SockerProvider>
-      </Provider>
-    </BrowserRouter>
-  </StrictMode>
+  // <StrictMode>
+  <BrowserRouter>
+    <Provider store={store}>
+      <SockerProvider>
+        <App />
+      </SockerProvider>
+    </Provider>
+  </BrowserRouter>
+  //</StrictMode>
 )

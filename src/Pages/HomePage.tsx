@@ -13,6 +13,9 @@ function HomePage() {
   const { socket }: any = useContext(SocketContext);
   const dispatch = useDispatch();
 
+  const RecipentName: any = useSelector((state: RootState) => {
+    return state.user.recipientName
+  });
 
   const userData: any = useSelector((state: RootState) => {
     return state.user.userData
@@ -125,7 +128,7 @@ function HomePage() {
   }, []);
 
   return (
-    <div className="h-[90%] md:h-screen w-full flex relative">
+    <div className={`${RecipentName ? "h-screen" : "h-[90%] md:h-screen"} w-full flex relative`}>
       <MainPage />
       <MessageContainer />
     </div>

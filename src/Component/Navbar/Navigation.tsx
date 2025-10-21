@@ -17,10 +17,14 @@ function Navigation() {
         return state.user.contact
     });
 
+    const RecipentName: any = useSelector((state: RootState) => {
+        return state.user.recipientName
+    });
+
     const isNewMessage: boolean = contact.some((item: any) => item.unseenmessagecount >= 1);
 
     return (
-        <div className="bg-white w-full border-t md:w-fit md:border-r-[1px] border-zinc-200 flex flex-row md:flex-col justify-between h-fit md:h-full px-2">
+        <div className={`${RecipentName ? "hidden md:flex" : "flex"} bg-white w-full border-t md:w-fit md:border-r-[1px] border-zinc-200  flex-row md:flex-col justify-between h-fit md:h-full px-2`}>
             <div className=" md:py-4 flex flex-row md:flex-col gap-4 p-2 justify-around md:justify-normal w-1/2 md:w-full">
                 <button onClick={() => navigate("/")} className={`${pathname == "/" ? "bg-zinc-200" : "bg-transparent text-[#6d6d6d]"} hover:bg-zinc-200 p-3 rounded-full active:bg-white flex justify-center w-fit h-fit relative`}>
                     {

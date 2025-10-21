@@ -5,12 +5,15 @@ import RenderMessage from "./RenderMessage";
 import { useContext, useEffect } from "react";
 import { AxiosVite } from "../../utils/Axios";
 import { SocketContext } from "../../SocketProvider/SockerProvider";
+import RenderAudio from "../MediaComponent/RenderAudio";
+
 
 
 type Item = {
   id: number,
   message: string,
-  reciver: string
+  reciver: string,
+  mediaType: string
 }
 function MessageComponent() {
 
@@ -74,9 +77,16 @@ function MessageComponent() {
       <div id="Message-Container" className="h-full w-full py-14 px-4 md:py-24 xl:px-16 flex flex-col gap-8 overflow-y-auto Scroll-Container">
         {
           FilterMessage.map((item: Item, index: number) => {
-            return (
-              <RenderMessage key={index} item={item} />
-            )
+            if (item?.mediaType) {
+              return (
+                <RenderAudio key={index} item={item} />
+              )
+            }
+            else {
+              return (
+                <RenderMessage key={index} item={item} />
+              )
+            }
           })
         }
       </div>

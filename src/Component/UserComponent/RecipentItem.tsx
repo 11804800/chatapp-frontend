@@ -5,6 +5,7 @@ import { useContext, useEffect } from "react";
 import { SocketContext } from "../../SocketProvider/SockerProvider";
 import { GetDateAndTime } from "../../utils/DateAndTimeFormat";
 import { FaUser } from "react-icons/fa";
+import { BsMic } from "react-icons/bs";
 
 function RecipentItem({ item }: any) {
 
@@ -63,7 +64,12 @@ function RecipentItem({ item }: any) {
                     <p className="text-[12px]">Yesterday</p>
                 </div>
                 <div className="flex justify-between w-full items-center pr-1 pt-2">
-                    <p className="text-[13px] line-clamp-1 w-[60%]">{item?.lastMessage}</p>
+                    <div className="flex items-center text-[13px] gap-2 w-[80%] sm:w-[60%]">
+                        {
+                            item?.mediaType == "audio" && <BsMic />
+                        }
+                        <p className=" line-clamp-1 ">{item?.lastMessage}</p>
+                    </div>
                     <div className="flex gap-2 items-center">
                         <p className="text-[10px]">{Time}</p>
                         {
