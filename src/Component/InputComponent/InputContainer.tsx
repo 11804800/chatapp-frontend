@@ -28,11 +28,12 @@ function InputContainer() {
       message: message,
       consumer: Reciver,
       publisher: userData?._id,
-      sent: false
+      sent: false,
+      createdAt: new Date().toISOString()
     }
     socket.emit("send-message", body);
     dispatch(addNewMessage(body));
-    dispatch(setLastMessage({ id: Reciver, message: message }));
+    dispatch(setLastMessage({ id: Reciver, message: message, mediaType: null }));
     setMessage("");
   }
 

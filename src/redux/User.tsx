@@ -61,10 +61,8 @@ const UserSlice = createSlice({
             state.contact[index].unseenmessagecount = 0;
         },
         removeContact: (state, action: PayloadAction<any>) => {
-            const { index } = action.payload;
-            console.log(state.contact.find((item: any, i: number) => i == index));
-        }
-        ,
+            state.contact = state.contact.filter((item: any) => item.userId._id != action.payload);
+        },
         Logout: (state) => {
             localStorage.removeItem('token');
             state.token = null;

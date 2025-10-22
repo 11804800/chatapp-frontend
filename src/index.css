@@ -54,6 +54,10 @@ body {
   }
 }
 
+.loading2 {
+  animation: filler 4s linear 0s forwards;
+}
+
 .animate-bounce1 {
   animation: filler1 1.4s linear 0s infinite forwards;
 }

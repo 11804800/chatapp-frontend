@@ -12,7 +12,6 @@ function RecipentList() {
         return state.user.contact
     });
 
-
     if (Contact.length <= 0) {
         return (
             <div className="h-full flex flex-col gap-4 items-center justify-center">

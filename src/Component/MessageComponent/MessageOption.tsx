@@ -2,27 +2,28 @@ import { useEffect, useRef } from "react"
 import { BiCopy, BiReply, BiSmile } from "react-icons/bi";
 import { BsTrash } from "react-icons/bs";
 import { GoThumbsdown } from "react-icons/go";
+import { useDispatch } from "react-redux";
+import { addToSelectedMessage, toggleSelectMessage } from "../../redux/message";
 
 
-function MessageOption({ showMessageOption, setShowMessageOption }: any) {
+function MessageOption({ showMessageOption, setShowMessageOption, ItemId }: any) {
 
     const MessageOptionRef: any = useRef(null);
+    const dispatch = useDispatch();
 
+    const MessageContainer: any = document.getElementById("Message-Container");
     useEffect(() => {
-        
-        const MessageContainer: any = document.getElementById("Message-Container");
+
         if (MessageOptionRef.current) {
-            const Options=MessageOptionRef.current;
-            const rect=Options.getBoundingClientRect();
-            if(rect.top+MessageOptionRef.current.clientHeight>MessageContainer.clientHeight)
-            {
+            const Options = MessageOptionRef.current;
+            const rect = Options.getBoundingClientRect();
+            if (rect.top + MessageOptionRef.current.clientHeight > MessageContainer.clientHeight) {
                 MessageOptionRef.current.style.removeProperty("top");
-                MessageOptionRef.current.style.bottom="32px";
+                MessageOptionRef.current.style.bottom = "32px";
             }
-            else
-            {
+            else {
                 MessageOptionRef.current.style.removeProperty("bottom");
-                MessageOptionRef.current.style.top="32px";
+                MessageOptionRef.current.style.top = "32px";
             }
         }
 
@@ -61,7 +62,11 @@ function MessageOption({ showMessageOption, setShowMessageOption }: any) {
                     <GoThumbsdown size={18} />
                     Report
                 </button>
-                <button className="text-nowrap hover:bg-zinc-100 active:bg-white w-full pl-2 pr-18 py-2 text-left text-sm rounded-md flex items-center gap-2">
+                <button onClick={() => {
+                    MessageContainer.style.overflowY = "auto";
+                    dispatch(addToSelectedMessage(ItemId))
+                    dispatch(toggleSelectMessage())
+                }} className="text-nowrap hover:bg-zinc-100 active:bg-white w-full pl-2 pr-18 py-2 text-left text-sm rounded-md flex items-center gap-2">
                     <BsTrash size={18} />
                     Delete
                 </button>

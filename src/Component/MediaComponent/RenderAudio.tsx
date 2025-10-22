@@ -1,12 +1,17 @@
-import { useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import type { RootState } from "../../redux/Store"
 import { CiClock2 } from "react-icons/ci";
 import { BsCheck2All } from "react-icons/bs";
-import { BiCheck } from "react-icons/bi";
+import { BiCheck, BiChevronDown } from "react-icons/bi";
 import { useEffect, useRef, useState } from "react";
 import { FaPause, FaPlay } from "react-icons/fa6";
 import { FormatTime, FormWaveSurfOptions } from "../AudioComponent/AudioComponent";
 import WaveSurfer from "wavesurfer.js";
+import MessageOption from "../MessageComponent/MessageOption";
+import { TimeFormatter } from "../../utils/Formatter";
+import { IoIosCheckbox } from "react-icons/io";
+import { MdCheckBoxOutlineBlank } from "react-icons/md";
+import { addToSelectedMessage } from "../../redux/message";
 
 
 function AudioPlay({ audio }: any) {
@@ -41,9 +46,11 @@ function AudioPlay({ audio }: any) {
             });
 
             return () => {
-                WaveSurfRef.current?.un('ready', OnReady);
-                WaveSurfRef.current?.un("audioprocess")
-                WaveFormRef.current?.destroy();
+                if (WaveFormRef.current) {
+                    WaveSurfRef.current?.un('ready', OnReady);
+                    WaveSurfRef.current?.un("audioprocess")
+                    WaveFormRef.current?.destroy();
+                }
             }
         }
     }, [audio]);
@@ -54,7 +61,7 @@ function AudioPlay({ audio }: any) {
     }
 
     return (
-        <div className="">
+        <div className="pr-2">
             <div className="flex items-center gap-2 px-1 py-2">
                 <button onClick={PlayPause} className="text-zinc-600">
                     {
@@ -79,18 +86,48 @@ function AudioPlay({ audio }: any) {
 
 function RenderAudio({ item }: any) {
 
+
+    const dispatch = useDispatch();
+
+    const SelectMessage: boolean = useSelector((state: RootState) => {
+        return state.message.selectMessage
+    });
+
+    const SelectedMessages: any = useSelector((state: RootState) => {
+        return state.message.selectedMessage
+    });
+
     const Reciver: any = useSelector((state: RootState) => {
         return state.user.recipientName
     });
 
+    const [showMessageOption, setShowMessageOption] = useState(false);
+
+    const ShowOptions = () => {
+        const MessageContainer: any = document.getElementById("Message-Container");
+        MessageContainer.style.overflowY = "hidden";
+        setShowMessageOption(!showMessageOption)
+    }
+
     if (item?.consumer == Reciver) {
         return (
-            <div className="flex w-full justify-end px-4 relative">
-                <div className="self-start flex px-2 drop-shadow relative shrink-0 overflow-hidden">
+            <div className={`flex w-full justify-end px group relative ${SelectedMessages.includes(item._id) && "bg-green-300/35"}`}>
+                <div className="self-start flex px-2 drop-shadow relative shrink-0 overflow-hidden gap-1">
+                    {
+                        SelectMessage &&
+                        <button onClick={() => dispatch(addToSelectedMessage(item?._id))} className={`text-green-700`}>
+                            {
+                                SelectedMessages.includes(item._id) ?
+                                    <IoIosCheckbox />
+                                    :
+                                    <MdCheckBoxOutlineBlank />
+                            }
+                        </button>
+                    }
                     <div className="bg-[#d9fdd3] font-medium px-2 py-1  w-fit  flex items-start rounded-md">
                         <AudioPlay audio={item?.media} />
                         <div className="flex gap-[2px] absolute right-6 -bottom-[18px] h-full items-center px-2">
-                            <p className="text-[10px]">12:04</p>
+                            <p className="text-[10px]">{TimeFormatter(item?.createdAt)}</p>
                             {
                                 !item.sent ?
                                     <span>
@@ -115,22 +152,45 @@ function RenderAudio({ item }: any) {
                         </div>
                     </div>
                     <div className="rotate-45 -translate-x-[8px] -translate-y-1.5 w-[12px] h-[12px] bg-[#d9fdd3] rounded"></div>
+                    <button onClick={ShowOptions} className="message-option-btn group-hover:flex text-zinc-500 hidden absolute right-5 top-0 bg-[#d9fdd3]">
+                        <BiChevronDown size={23} />
+                    </button>
                 </div>
-            </div>
+                {
+                    showMessageOption && <MessageOption showMessageOption={showMessageOption} setShowMessageOption={setShowMessageOption} ItemId={item._id} />
+                }
+            </div >
         )
     }
     else {
         return (
-            <div className="w-full flex group justify-start relative">
+            <div className={` w-full flex group justify-start relative gap-1 ${SelectedMessages.includes(item._id) && "bg-green-300/35"}`}>
+                {
+                    SelectMessage &&
+                    <button onClick={() => dispatch(addToSelectedMessage(item?._id))} className={`text-green-700`}>
+                        {
+                            SelectedMessages.includes(item._id) ?
+                                <IoIosCheckbox />
+                                :
+                                <MdCheckBoxOutlineBlank />
+                        }
+                    </button>
+                }
                 <div className="self-start flex px-2 drop-shadow relative shrink-0 overflow-hidden">
                     <div className="rotate-45 translate-x-[8px] -translate-y-1.5 w-[12px] h-[12px] bg-white rounded"></div>
                     <div className="bg-white font-medium px-2 py-1  w-fit  flex items-start rounded-md">
                         <AudioPlay audio={item?.media} />
                         <div className="flex gap-[2px] absolute right-4 -bottom-[18px] h-full items-center px-2">
-                            <p className="text-[10px]">12:04</p>
+                            <p className="text-[10px]">{TimeFormatter(item?.createdAt)}</p>
                         </div>
+                        <button onClick={ShowOptions} className="message-option-btn group-hover:flex hidden text-zinc-500 absolute right-2 top-0 bg-white">
+                            <BiChevronDown size={23} />
+                        </button>
                     </div>
                 </div>
+                {
+                    showMessageOption && <MessageOption showMessageOption={showMessageOption} setShowMessageOption={setShowMessageOption} ItemId={item._id} />
+                }
             </div>
         )
     }
