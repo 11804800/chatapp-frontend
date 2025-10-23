@@ -95,7 +95,9 @@ function ShowAllUserModal() {
                         firstname: FilterData.firstname,
                         lastname: FilterData.lastname,
                         _id: FilterData._id,
-                        socket_id: FilterData.socket_id
+                        socket_id: FilterData.socket_id,
+                        image: FilterData.image,
+                        description: FilterData.description
                     }
                 }));
                 CloseModal()

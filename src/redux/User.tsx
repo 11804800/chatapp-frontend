@@ -49,12 +49,23 @@ const UserSlice = createSlice({
         },
         setLastMessage: (state, action: PayloadAction<any>) => {
             const index = state.contact.findIndex((item: any) => item.userId._id == action.payload.id);
-            state.contact[index].lastMessage = action.payload.message;
+            state.contact[index].lastMessageTime = action.payload?.lastMessageTime;
+            state.contact[index].mediaType = action.payload?.mediaType;
+            state.contact[index].lastMessage = action.payload?.message;
+            state.contact[index].mediaDuration = action.payload.mediaDuration;
         },
         updateLastMessage: (state, action: PayloadAction<any>) => {
             const index = state.contact.findIndex((item: any) => item.userId._id == action.payload.id);
-            state.contact[index].lastMessage = action.payload.message;
-            state.contact[index].unseenmessagecount = state.contact[index].unseenmessagecount + 1;
+            if (index < 0) {
+                console.log(action.payload);
+            }
+            else {
+                state.contact[index].lastMessage = action.payload?.message;
+                state.contact[index].unseenmessagecount = state.contact[index].unseenmessagecount + 1;
+                state.contact[index].lastMessageTime = action.payload.lastMessageTime;
+                state.contact[index].mediaType = action.payload?.mediaType;
+                state.contact[index].mediaDuration = action.payload.mediaDuration;
+            }
         },
         setUnseenMessageCount: (state, action: PayloadAction<any>) => {
             const index = state.contact.findIndex((item: any) => item.userId._id == action.payload);
@@ -66,10 +77,13 @@ const UserSlice = createSlice({
         Logout: (state) => {
             localStorage.removeItem('token');
             state.token = null;
+        },
+        removeContacts: (state, action: PayloadAction<any>) => {
+            state.contact = state.contact.filter((item: any) => !action.payload.includes(item.userId._id));
         }
     }
 })
 
 
 export default UserSlice.reducer;
-export const { SetUser, setToken, setRecipientName, setUserData, AddNewContact, setContact, Logout, removeContact, updateLastMessage, setUnseenMessageCount, setLastMessage } = UserSlice.actions;
+export const { SetUser, setToken, setRecipientName, setUserData, AddNewContact, setContact, Logout, removeContact, updateLastMessage, setUnseenMessageCount, setLastMessage, removeContacts } = UserSlice.actions;

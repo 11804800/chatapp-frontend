@@ -9,6 +9,7 @@ import { IoSearchSharp } from "react-icons/io5";
 import { deleteMessages, filterMessage, setSelectedMessages, toggleSelectMessage } from "../../redux/message";
 import { AxiosVite } from "../../utils/Axios";
 import { LiaTimesSolid } from "react-icons/lia";
+import { toggleContactInfo } from "../../redux/Contact";
 
 
 function RenderRecipentHeaderOptions({ setDeleteMessage }: any) {
@@ -137,7 +138,7 @@ function RenderRecipentHeaderOptions({ setDeleteMessage }: any) {
             <div ref={optionref} id="recipent-chat-options" className="p-3 shadow-2xl rounded-xl overflow-hidden absolute bg-white right-1 z-10 top-5">
               <ul className="flex flex-col gap-2">
                 <li>
-                  <button className="text-nowrap hover:bg-zinc-100 active:bg-white w-full px-6 py-2 text-left text-sm rounded-md flex items-center gap-2">
+                  <button onClick={() => { setShowOptions(false); dispatch(toggleContactInfo()); }} className="text-nowrap hover:bg-zinc-100 active:bg-white w-full px-6 py-2 text-left text-sm rounded-md flex items-center gap-2">
                     <BiInfoCircle size={18} />
                     Contact info
                   </button>
@@ -220,7 +221,7 @@ function RecipentHeader() {
         <div className="flex justify-between p-2 w-full">
           <div className="flex flex-col">
             <p className="font-medium line-clamp-1">{ReciverData?.userId?.firstname}{" "}{ReciverData?.userId?.lastname}</p>
-            <button className="line-clamp-1 text-[12px] text-teal-600 hover:text-green-700 active:text-[brown]">click here for contact info</button>
+            <button onClick={() => dispatch(toggleContactInfo())} className="line-clamp-1 text-[12px] text-teal-600 hover:text-green-700 active:text-[brown]">click here for contact info</button>
           </div>
           <RenderRecipentHeaderOptions setDeleteMessage={setDeleteMessage} />
         </div>

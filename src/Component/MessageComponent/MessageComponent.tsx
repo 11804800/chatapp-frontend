@@ -2,7 +2,7 @@
 import { useSelector } from "react-redux"
 import type { RootState } from "../../redux/Store"
 import RenderMessage from "./RenderMessage";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { AxiosVite } from "../../utils/Axios";
 import { SocketContext } from "../../SocketProvider/SockerProvider";
 import RenderAudio from "../MediaComponent/RenderAudio";
@@ -37,6 +37,15 @@ function MessageComponent() {
   });
 
 
+  const MessageContainerRef = useRef<any>(null);
+
+
+  useEffect(() => {
+    if (MessageContainerRef.current) {
+      MessageContainerRef.current.scrollTop = MessageContainerRef.current.scrollHeight;
+    }
+
+  }, [Messages]);
 
   const { socket }: any = useContext(SocketContext);
 
@@ -63,7 +72,7 @@ function MessageComponent() {
 
     }
 
-  }, [recipentName]);
+  }, [recipentName, Messages]);
 
 
 
@@ -80,7 +89,7 @@ function MessageComponent() {
   }
   else {
     return (
-      <div id="Message-Container" className="h-full w-full py-14 px-4 md:py-24 xl:px-16 flex flex-col gap-8 overflow-y-auto Scroll-Container bg-zinc-50">
+      <div id="Message-Container" ref={MessageContainerRef} className="h-full w-full py-14 px-4 md:py-24 xl:px-16 flex flex-col gap-8 overflow-y-auto Scroll-Container bg-zinc-50">
         {
           FilterMessage.map((item: Item, index: number) => {
             if (item?.mediaType) {

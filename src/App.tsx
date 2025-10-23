@@ -10,6 +10,8 @@ import { ScrollTrigger } from "gsap/all";
 import ShowAllUserModal from "./Component/Modals/ShowAllUserModal";
 import StatusView from "./Component/StatusComponent/StatusView";
 import LoadingComponent from "./Component/LoadingComponent";
+import ForwardModal from "./Component/Modals/ForwardModal";
+import MessageInfo from "./Component/Modals/MessageInfo";
 const HomeLayout = lazy(() => import("./Layout/HomeLayout"));
 const SettingPage = lazy(() => import("./Pages/SettingPage"));
 const StatusPage = lazy(() => import("./Pages/StatusPage"));
@@ -49,11 +51,25 @@ function App() {
     return state.status.showStatus
   });
 
+  const ForwardMessage: boolean = useSelector((state: RootState) => {
+    return state.message.forwardMessage
+  });
+
+  const ShowMessageInfo: boolean = useSelector((state: RootState) => {
+    return state.message.showMessageInfo
+  });
+
 
   return (
     <>
       {
+        ShowMessageInfo && <MessageInfo />
+      }
+      {
         showStatus && <StatusView />
+      }
+      {
+        ForwardMessage && <ForwardModal />
       }
       {
         showContactModal

@@ -85,9 +85,9 @@ function HomePage() {
     socket.on("new-message", (data: any) => {
       const publisherId = data.data.publisher;
       const contactExists = contact.some((item: any) => item.userId._id === publisherId);
-      if (contactExists) {
+      if (!contactExists) {
         dispatch(addNewMessage(data.data));
-        dispatch(updateLastMessage({ id: data.data.publisher, message: data.data.message }))
+        dispatch(updateLastMessage({ id: data.data.publisher, message: data.data.message }));
       }
       else {
         const config = {
@@ -104,6 +104,7 @@ function HomePage() {
             unseenmessagecount: 1
           }));
           dispatch(addNewMessage(data.data));
+          dispatch(updateLastMessage({ id: data.data.publisher, message: data.data.message }));
         }).catch((err) => { console.log(err.response.data) });
       }
 

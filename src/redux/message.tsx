@@ -3,24 +3,44 @@ import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 interface MessagesInterface {
     messages: any[],
     selectMessage: boolean
-    selectedMessage: any[]
+    selectedMessage: any[],
+    messageId: string,
+    forwardMessage: boolean,
+    reply: boolean,
+    showMessageInfo: boolean
 }
 
 const initialState: MessagesInterface = {
     messages: [],
     selectedMessage: [],
-    selectMessage: false
+    selectMessage: false,
+    messageId: "",
+    forwardMessage: false,
+    reply: false,
+    showMessageInfo: false
 }
 
 const MessageSlice = createSlice({
     name: "message",
     initialState,
     reducers: {
+        toggleShowMessageInfo: (state) => {
+            state.showMessageInfo = !state.showMessageInfo
+        },
+        setMessageId: (state, action: PayloadAction<string>) => {
+            state.messageId = action.payload
+        },
+        toggleForwardMessage: (state) => {
+            state.forwardMessage = !state.forwardMessage
+        },
         setMessage: (state, action: PayloadAction<any>) => {
             state.messages = action.payload
         },
         addNewMessage: (state, action: PayloadAction<any>) => {
             state.messages.push(action.payload);
+        },
+        toggleReply: (state) => {
+            state.reply = !state.reply
         },
         toggleSelectMessage: (state) => {
             state.selectMessage = !state.selectMessage
@@ -67,7 +87,10 @@ const MessageSlice = createSlice({
 })
 
 export default MessageSlice.reducer;
-export const { setMessage,
+export const {
+    toggleShowMessageInfo,
+    setMessageId,
+    setMessage,
     addNewMessage,
     toggleSelectMessage,
     updateMessage,
@@ -76,4 +99,6 @@ export const { setMessage,
     deleteMessages,
     addToSelectedMessage,
     filterMessage,
-    setSelectedMessages } = MessageSlice.actions;
+    setSelectedMessages,
+    toggleForwardMessage
+    , toggleReply } = MessageSlice.actions;

@@ -8,6 +8,7 @@ import type { RootState } from "../redux/Store";
 import { FaCirclePlus } from "react-icons/fa6";
 import { AxiosVite } from "../utils/Axios";
 import { setMyStatus, setShowStatus, SetStatus } from "../redux/status";
+import { DateFormatter, TimeFormatter } from "../utils/Formatter";
 function StatusPage() {
 
   const [StatusOptionActive, setStatusOptionActive] = useState<boolean>(false);
@@ -175,7 +176,7 @@ function StatusPage() {
                       <div>
                         <p>{item?.userId?.firstname}{" "}{item?.userId?.lastname}</p>
                         <p className="text-zinc-500 text-sm">
-                          Today at 07:09
+                          {DateFormatter(item.createdAt)}{" "}{TimeFormatter(item.createdAt)}
                         </p>
                       </div>
                     </div>

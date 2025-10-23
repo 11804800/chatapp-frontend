@@ -6,6 +6,10 @@ import { SocketContext } from "../../SocketProvider/SockerProvider";
 import { GetDateAndTime } from "../../utils/DateAndTimeFormat";
 import { FaUser } from "react-icons/fa";
 import { BsMic } from "react-icons/bs";
+import { IoCheckbox } from "react-icons/io5";
+import { MdOutlineCheckBoxOutlineBlank } from "react-icons/md";
+import { addToSelectContact } from "../../redux/Contact";
+
 
 function RecipentItem({ item }: any) {
 
@@ -32,8 +36,12 @@ function RecipentItem({ item }: any) {
         return state.user.recipientName
     });
 
-    const Time: any = item?.updatedAt && GetDateAndTime(item.updatedAt);
 
+    const Time: any = item?.lastMessageTime && GetDateAndTime(item.lastMessageTime);
+
+    const SelectedContact: any = useSelector((state: RootState) => {
+        return state.contact.selectedContact
+    });
 
     useEffect(() => {
         if (item.unseenmessagecount >= 1) {
@@ -45,9 +53,27 @@ function RecipentItem({ item }: any) {
 
     }, [item, recipientName]);
 
+
+
     return (
-        <div className={`w-full flex gap-1 hover:bg-zinc-200 p-2 rounded-lg ${recipientName == item.userId._id && "bg-zinc-200"}`} onClick={() => SetRecipient(item.userId._id)}>
-            {selectContact && <input type="checkbox" />}
+        <div className={`w-full flex gap-1 hover:bg-zinc-200 p-2 rounded-lg ${!selectContact && recipientName == item.userId._id && "bg-zinc-200"} ${SelectedContact.includes(item?.userId._id) && "bg-green-400/25"} `} onClick={() => {
+            if (!selectContact) {
+                SetRecipient(item.userId._id)
+            }
+            else {
+                dispatch(addToSelectContact(item?.userId._id))
+            }
+        }}>
+            {selectContact &&
+                <button>
+                    {
+                        SelectedContact.includes(item?.userId._id) ?
+                            < IoCheckbox />
+                            :
+                            <MdOutlineCheckBoxOutlineBlank />
+                    }
+                </button>
+            }
             <div className="shrink-0 relative">
                 {
                     item?.userId?.image ?
@@ -68,7 +94,7 @@ function RecipentItem({ item }: any) {
                         {
                             item?.mediaType == "audio" && <BsMic />
                         }
-                        <p className=" line-clamp-1 ">{item?.lastMessage}</p>
+                        <p className=" line-clamp-1 ">{item?.lastMessage ? item?.lastMessage : item?.mediaDuration}</p>
                     </div>
                     <div className="flex gap-2 items-center">
                         <p className="text-[10px]">{Time}</p>

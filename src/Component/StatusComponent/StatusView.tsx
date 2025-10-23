@@ -9,6 +9,7 @@ import { FiTrash2 } from "react-icons/fi";
 import { GoInfo } from "react-icons/go";
 import { MdClose } from "react-icons/md";
 import { AxiosVite } from "../../utils/Axios";
+import { TimeFormatter } from "../../utils/Formatter";
 
 
 function RenderStatus({ data }: any) {
@@ -193,7 +194,7 @@ function StatusView() {
                             }
                             <div className="flex flex-col gap-1 text-white font-medium">
                                 <p className="text-zinc-100">{userData?.firstname}{" "}{userData?.lastname}</p>
-                                <p className="text-xs px-1 text-zinc-200">12:12</p>
+                                <p className="text-xs px-1 text-zinc-200">{TimeFormatter(MyStatus[statusIndex]?.createdAt)}</p>
                             </div>
                         </div>
                         <div className="relative">
@@ -202,7 +203,7 @@ function StatusView() {
                             </button>
                             {
                                 statusOptionActive &&
-                                <div ref={statusOptionRef} className="absolute top-11 right-4 sm:left-0 w-fit bg-white shadow-xl flex flex-col gap-2 p-4 rounded-md">
+                                <div ref={statusOptionRef} className="absolute top-11 right-4 md:left-0 w-fit bg-white shadow-xl flex flex-col gap-2 p-4 rounded-md">
                                     <button onClick={() => {
                                         setStatusOption(false);
                                         DeleteStatus(MyStatus[statusIndex]._id);
@@ -295,7 +296,7 @@ function StatusView() {
                     }
                     <div className="flex flex-col gap-1 text-white font-medium">
                         <p className="text-zinc-100">{FilterStatus?.userId?.firstname}{" "}{FilterStatus?.userId?.lastname}</p>
-                        <p className="text-xs px-1 text-zinc-200">12:12</p>
+                        <p className="text-xs px-1 text-zinc-200">{TimeFormatter(FilterStatus.createdAt)}</p>
                     </div>
                 </div>
                 <div onClick={DecreaseStatusIndex} className="bg-transparent h-full absolute left-0 top-20  w-[50%] z-[999]"></div>

@@ -1,10 +1,11 @@
 import { useEffect, useRef } from "react"
 import { BiCopy, BiReply, BiSmile } from "react-icons/bi";
 import { BsTrash } from "react-icons/bs";
-import { GoThumbsdown } from "react-icons/go";
-import { useDispatch } from "react-redux";
-import { addToSelectedMessage, toggleSelectMessage } from "../../redux/message";
-
+import { useDispatch, useSelector } from "react-redux";
+import { addToSelectedMessage, setMessageId, toggleForwardMessage, toggleReply, toggleSelectMessage } from "../../redux/message";
+import { TbArrowForwardUpDouble } from "react-icons/tb";
+import type { RootState } from "../../redux/Store";
+import { IoMdInformationCircleOutline } from "react-icons/io";
 
 function MessageOption({ showMessageOption, setShowMessageOption, ItemId }: any) {
 
@@ -40,38 +41,60 @@ function MessageOption({ showMessageOption, setShowMessageOption, ItemId }: any)
         }
     }, [showMessageOption]);
 
+    const Messages: any = useSelector((state: RootState) => {
+        return state.message.messages
+    });
+
+    const FilterMessage: any = Messages.find((item: any) => item._id == ItemId);
+
     return (
-        <div ref={MessageOptionRef} onClick={() => setShowMessageOption(false)} className="flex flex-col bg-white shadow-2xl p-3 rounded-xl w-fit absolute z-50">
-            <div className="flex flex-col gap-1">
-                <button className="flex gap-1 pl-2 pr-18 py-2  items-center hover:bg-zinc-100 rounded-md active:bg-transparent">
-                    <BiSmile size={18} />
-                    React
-                </button>
-                <button className="text-nowrap hover:bg-zinc-100 active:bg-white w-full pl-2 pr-18 py-2 text-left text-sm rounded-md flex items-center gap-2">
-                    <BiCopy size={18} />
-                    Copy
-                </button>
-                <button className="text-nowrap hover:bg-zinc-100 active:bg-white w-full pl-2 pr-18 py-2 text-left text-sm rounded-md flex items-center gap-2">
-                    <BiReply size={18} />
-                    Reply
-                </button>
-                <button className="text-nowrap hover:bg-zinc-100 active:bg-white w-full pl-2 pr-18 py-2 text-left text-sm rounded-md flex items-center gap-2">
-                    Forward
-                </button>
-                <button className="text-nowrap hover:bg-zinc-100 active:bg-white w-full pl-2 pr-18 py-2 text-left text-sm rounded-md flex items-center gap-2">
-                    <GoThumbsdown size={18} />
-                    Report
-                </button>
-                <button onClick={() => {
-                    MessageContainer.style.overflowY = "auto";
-                    dispatch(addToSelectedMessage(ItemId))
-                    dispatch(toggleSelectMessage())
-                }} className="text-nowrap hover:bg-zinc-100 active:bg-white w-full pl-2 pr-18 py-2 text-left text-sm rounded-md flex items-center gap-2">
-                    <BsTrash size={18} />
-                    Delete
-                </button>
+        <>
+            <div ref={MessageOptionRef} onClick={() => setShowMessageOption(false)} className="flex flex-col bg-white shadow-2xl p-3 rounded-xl w-fit absolute z-50">
+                <div className="flex flex-col gap-1">
+                    <button className="flex items-center gap-1 pl-2 pr-18 py-2 hover:bg-zinc-100 rounded-md active:bg-transparent">
+                        <IoMdInformationCircleOutline />
+                        Info
+                    </button>
+                    <button className="flex gap-1 pl-2 pr-18 py-2  items-center hover:bg-zinc-100 rounded-md active:bg-transparent">
+                        <BiSmile size={18} />
+                        React
+                    </button>
+                    {
+                        FilterMessage?.message &&
+                        <button onClick={() => {
+                            navigator.clipboard.writeText(FilterMessage?.message);
+                        }} className="text-nowrap hover:bg-zinc-100 active:bg-white w-full pl-2 pr-18 py-2 text-left text-sm rounded-md flex items-center gap-2">
+                            <BiCopy size={18} />
+                            Copy
+                        </button>
+                    }
+                    <button onClick={() => {
+                        dispatch(setMessageId(ItemId));
+                        setShowMessageOption(false);
+                        dispatch(toggleReply())
+                    }} className="text-nowrap hover:bg-zinc-100 active:bg-white w-full pl-2 pr-18 py-2 text-left text-sm rounded-md flex items-center gap-2">
+                        <BiReply size={18} />
+                        Reply
+                    </button>
+                    <button onClick={() => {
+                        dispatch(toggleForwardMessage());
+                        dispatch(setMessageId(ItemId));
+                        setShowMessageOption(false);
+                    }} className="text-nowrap hover:bg-zinc-100 active:bg-white w-full pl-2 pr-18 py-2 text-left text-sm rounded-md flex items-center gap-2">
+                        <TbArrowForwardUpDouble />
+                        Forward
+                    </button>
+                    <button onClick={() => {
+                        MessageContainer.style.overflowY = "auto";
+                        dispatch(addToSelectedMessage(ItemId))
+                        dispatch(toggleSelectMessage())
+                    }} className="text-nowrap hover:bg-zinc-100 active:bg-white w-full pl-2 pr-18 py-2 text-left text-sm rounded-md flex items-center gap-2">
+                        <BsTrash size={18} />
+                        Delete
+                    </button>
+                </div>
             </div>
-        </div>
+        </>
     )
 }
 

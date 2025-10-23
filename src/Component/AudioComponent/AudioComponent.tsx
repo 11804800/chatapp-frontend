@@ -145,6 +145,7 @@ function AudioComponent({ startRecording, setStartRecording }: any) {
         const formData: any = new FormData();
         formData.append("audio", blob);
         formData.append("consumer", Reciver);
+        formData.append("mediaDuration", FormatTime(elapsedTime));
 
         AxiosVite.post("/messages/media", formData, {
             headers: {
@@ -152,7 +153,7 @@ function AudioComponent({ startRecording, setStartRecording }: any) {
             }
         }).then((response: any) => {
             dispatch(addNewMessage(response.data.data));
-            dispatch(setLastMessage({ id: Reciver, message: FormatTime(elapsedTime), mediaType: "audio" }));
+            dispatch(setLastMessage({ id: Reciver, mediaDuration: FormatTime(elapsedTime), mediaType: "audio", lastMessageTime: new Date().toISOString() }));
             socket.emit("media-message", { data: { ...response.data.data, message: FormatTime(elapsedTime) } });
         }).catch((err: any) => {
             console.log(err.response.data);

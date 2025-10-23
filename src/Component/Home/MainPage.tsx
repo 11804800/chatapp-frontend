@@ -3,13 +3,14 @@ import { IoSearchOutline } from "react-icons/io5";
 import { BsThreeDotsVertical } from "react-icons/bs"
 import RecipentList from "../UserComponent/RecipentList"
 import { useDispatch, useSelector } from "react-redux"
-import { setShowContactModal, toggleSelectContact } from "../../redux/Contact";
+import { setSelectedContact, setShowContactModal, toggleSelectContact } from "../../redux/Contact";
 import { LuLogOut } from "react-icons/lu";
 import { useEffect, useRef, useState } from "react";
 import type { RootState } from "../../redux/Store";
-import { Logout } from "../../redux/User";
+import { Logout, removeContacts } from "../../redux/User";
 import { LiaTimesSolid } from "react-icons/lia";
 import { FiTrash2 } from "react-icons/fi";
+import { AxiosVite } from "../../utils/Axios";
 
 
 function MainPage() {
@@ -23,6 +24,14 @@ function MainPage() {
 
     const SelectContact = useSelector((state: RootState) => {
         return state.contact.selectContact
+    });
+
+    const token: string | null = useSelector((state: RootState) => {
+        return state.user.token
+    });
+
+    const SelectedContacts: any = useSelector((state: RootState) => {
+        return state.contact.selectedContact
     });
 
 
@@ -39,17 +48,40 @@ function MainPage() {
         }
     }, [showOption]);
 
+    function DeleteChat() {
+        AxiosVite.put(`/users/contact/`, {
+            contacts: SelectedContacts
+        }, {
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
+        }).then((response: any) => {
+            console.log(response.data)
+            if (response) {
+                dispatch(toggleSelectContact());
+                dispatch(setSelectedContact());
+                dispatch(removeContacts(SelectedContacts));
+            }
+        }).catch((err: any) => {
+            console.log(err.response.data);
+        });
+
+    }
+
     return (
         <div className={`shrink-0 w-full md:w-[350px] relative lg:w-[450px] xl:w-[510px] h-full ${recipientName ? "hidden md:flex" : "flex"} flex-col`}>
             <div className="w-full flex justify-between items-center px-4 py-3 shrink-0">
                 <p className="font-bold text-[22px] leading-[0.8]"> ChatApp</p>
                 {
                     SelectContact ?
-                        <div className="flex gap-15 pr-8">
-                            <button className="hover:bg-zinc-200 p-2 rounded-full active:bg-zinc-100" >
+                        <div className="flex gap-15">
+                            <button onClick={DeleteChat} className="hover:bg-zinc-200 p-2 rounded-full active:bg-zinc-100" >
                                 <FiTrash2 size={23} />
                             </button>
-                            <button className="hover:bg-zinc-200 p-2 rounded-full active:bg-zinc-100" onClick={() => dispatch(toggleSelectContact())}>
+                            <button className="hover:bg-zinc-200 p-2 rounded-full active:bg-zinc-100" onClick={() => {
+                                dispatch(toggleSelectContact());
+                                dispatch(setSelectedContact())
+                            }}>
                                 <LiaTimesSolid size={23} />
                             </button>
                         </div> :
@@ -63,8 +95,11 @@ function MainPage() {
                                 </button>
                                 {
                                     showOption &&
-                                    <div ref={OptionRef} className="absolute top-9 right-0 md:left-0 p-4 flex flex-col gap-2 rounded-md drop-shadow-2xl bg-white w-[200px]">
-                                        <button onClick={() => dispatch(toggleSelectContact())} className="flex active:bg-transparent text-sm gap-2 items-center pr-8 py-2 pl-2 rounded-md text-nowrap hover:bg-zinc-100">
+                                    <div ref={OptionRef} className="absolute top-9 right-0 md:left-0 p-4 flex flex-col gap-2 rounded-md drop-shadow-2xl bg-white w-[200px] z-[999]">
+                                        <button onClick={() => {
+                                            setShowOption(false);
+                                            dispatch(toggleSelectContact())
+                                        }} className="flex active:bg-transparent text-sm gap-2 items-center pr-8 py-2 pl-2 rounded-md text-nowrap hover:bg-zinc-100">
                                             <BiCheckSquare />
                                             Select Chats
                                         </button>

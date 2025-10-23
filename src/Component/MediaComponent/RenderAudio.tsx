@@ -12,6 +12,7 @@ import { TimeFormatter } from "../../utils/Formatter";
 import { IoIosCheckbox } from "react-icons/io";
 import { MdCheckBoxOutlineBlank } from "react-icons/md";
 import { addToSelectedMessage } from "../../redux/message";
+import { TbArrowForwardUpDouble } from "react-icons/tb";
 
 
 function AudioPlay({ audio }: any) {
@@ -124,7 +125,10 @@ function RenderAudio({ item }: any) {
                             }
                         </button>
                     }
-                    <div className="bg-[#d9fdd3] font-medium px-2 py-1  w-fit  flex items-start rounded-md">
+                    <div className="bg-[#d9fdd3] font-medium px-2 py-2  w-fit  flex items-start rounded-md relative overflow-hidden">
+                        {
+                            item.forward && <p className="text-[10px] text-zinc-500 flex items-center absolute top-0"><TbArrowForwardUpDouble /> Forwarded </p>
+                        }
                         <AudioPlay audio={item?.media} />
                         <div className="flex gap-[2px] absolute right-6 -bottom-[18px] h-full items-center px-2">
                             <p className="text-[10px]">{TimeFormatter(item?.createdAt)}</p>
@@ -151,8 +155,8 @@ function RenderAudio({ item }: any) {
                             }
                         </div>
                     </div>
-                    <div className="rotate-45 -translate-x-[8px] -translate-y-1.5 w-[12px] h-[12px] bg-[#d9fdd3] rounded"></div>
-                    <button onClick={ShowOptions} className="message-option-btn group-hover:flex text-zinc-500 hidden absolute right-5 top-0 bg-[#d9fdd3]">
+                    <div className="rotate-45 -translate-x-[12px] -translate-y-1.5 w-[14px] h-[14px] bg-[#d9fdd3] rounded"></div>
+                    <button onClick={ShowOptions} className="message-option-btn group-hover:flex text-zinc-500 hidden absolute right-7 top-0 bg-[#d9fdd3]">
                         <BiChevronDown size={23} />
                     </button>
                 </div>
@@ -179,6 +183,9 @@ function RenderAudio({ item }: any) {
                 <div className="self-start flex px-2 drop-shadow relative shrink-0 overflow-hidden">
                     <div className="rotate-45 translate-x-[8px] -translate-y-1.5 w-[12px] h-[12px] bg-white rounded"></div>
                     <div className="bg-white font-medium px-2 py-1  w-fit  flex items-start rounded-md">
+                        {
+                            item.forward && <p className="text-[10px] text-zinc-500 flex items-center absolute top-0"><TbArrowForwardUpDouble /> Forwarded </p>
+                        }
                         <AudioPlay audio={item?.media} />
                         <div className="flex gap-[2px] absolute right-4 -bottom-[18px] h-full items-center px-2">
                             <p className="text-[10px]">{TimeFormatter(item?.createdAt)}</p>

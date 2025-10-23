@@ -4,14 +4,16 @@ interface ContactInterface {
     Data: [],
     showContactModal: boolean,
     selectContact: boolean,
-    showContactInfo: boolean
+    showContactInfo: boolean,
+    selectedContact: any[]
 }
 
 const initialState: ContactInterface = {
     Data: [],
     showContactModal: false,
     selectContact: false,
-    showContactInfo: false
+    showContactInfo: false,
+    selectedContact: []
 }
 
 const ContactSlice = createSlice({
@@ -28,8 +30,20 @@ const ContactSlice = createSlice({
 
             state.selectContact = !state.selectContact
         },
-        toogleContactInfo: (state) => {
+        toggleContactInfo: (state) => {
             state.showContactInfo = !state.showContactInfo
+        },
+        addToSelectContact: (state, action: PayloadAction<any>) => {
+            if (state.selectedContact.includes(action.payload)) {
+                const newArray = state.selectedContact.filter((item: string) => item !== action.payload);
+                state.selectedContact = newArray;
+            }
+            else {
+                state.selectedContact.push(action.payload);
+            }
+        },
+        setSelectedContact: (state) => {
+            state.selectedContact = []
         }
     }
 });
@@ -39,4 +53,6 @@ export const {
     setShowContactModal,
     setContactData,
     toggleSelectContact,
-    toogleContactInfo } = ContactSlice.actions;
+    toggleContactInfo,
+    addToSelectContact,
+    setSelectedContact } = ContactSlice.actions;

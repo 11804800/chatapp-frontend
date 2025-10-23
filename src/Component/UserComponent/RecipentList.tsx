@@ -12,11 +12,12 @@ function RecipentList() {
         return state.user.contact
     });
 
+
     if (Contact.length <= 0) {
         return (
             <div className="h-full flex flex-col gap-4 items-center justify-center">
                 <p className="font-medium text-2xl">Start Chatting</p>
-                <button onClick={() => dispatch(setShowContactModal())} className="bg-zinc-400 w-[70%] text-white px-3 py-2 font-medium rounded-md shadow-md">New chat</button>
+                <button onClick={() => dispatch(setShowContactModal())} className="bg-blue-600 w-[300px] text-white px-3 py-2 font-medium rounded-md shadow-md">New chat</button>
             </div>
         )
     }

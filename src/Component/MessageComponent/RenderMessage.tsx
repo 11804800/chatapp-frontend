@@ -7,10 +7,12 @@ import { CiClock2 } from "react-icons/ci";
 import { BsCheck2All } from "react-icons/bs";
 import { TimeFormatter } from "../../utils/Formatter";
 import { IoIosCheckbox } from "react-icons/io";
-import { MdCheckBoxOutlineBlank } from "react-icons/md";
+import { MdCheckBoxOutlineBlank, MdMic } from "react-icons/md";
 import { addToSelectedMessage } from "../../redux/message";
+import { TbArrowForwardUpDouble } from "react-icons/tb";
 
 function RenderMessage({ item }: any) {
+
 
   const userData: any = useSelector((state: RootState) => {
     return state.user.userData
@@ -89,8 +91,21 @@ function RenderMessage({ item }: any) {
         </button>
         <div className="relative  self-end flex  px-2 drop-shadow shrink-0 overflow-hidden">
           <div className="bg-[#d9fdd3] font-medium px-2 py-1  w-fit  flex items-start rounded-md">
-            <p className="px-2">{item.message}</p>
-            <div className="flex gap-[2px] relative -bottom-1 h-full items-center px-2">
+            <div>
+              {
+                item.forward && <p className="text-[10px] text-zinc-500 flex items-center"><TbArrowForwardUpDouble /> Forwarded </p>
+              }
+              {
+                item?.reply &&
+                <div className="rounded-md p-2 w-full bg-white shadow-md flex items-center gap-2" style={{ boxShadow: 'inset 0 2px 4px rgba(0, 0, 0, 0.1)' }}>
+                  {item?.reply?.message}
+                  {item?.reply.mediaType == "audio" && <MdMic />}
+                  {item?.reply?.mediaDuration}
+                </div>
+              }
+              <p className="px-2 pt-1">{item.message}</p>
+            </div>
+            <div className="flex gap-[2px] relative -bottom-1 h-full items-end px-2 py-1">
               <p className="text-[10px]">{TimeFormatter(item?.createdAt)}</p>
               {
                 !item.sent ?
