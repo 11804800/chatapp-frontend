@@ -9,9 +9,11 @@ import { setLastMessage } from "../../redux/User";
 import AudioComponent from "../AudioComponent/AudioComponent";
 import { FaTimes } from "react-icons/fa";
 import { MdMic } from "react-icons/md";
+import MediaMessage from "./MediaMessage";
 
 function InputContainer() {
 
+  const [ShowMediaOptions, setShowMediaOptions] = useState(false);
   const { socket }: any = useContext(SocketContext);
 
   const [startRecording, setStartRecording] = useState(false);
@@ -69,7 +71,10 @@ function InputContainer() {
   const FilterMessage: any = Message.find((item: any) => item._id == MessageId);
 
   return (
-    <div>
+    <div className="relative">
+      {ShowMediaOptions &&
+        <MediaMessage setShowMediaOptions={setShowMediaOptions} />
+      }
       {
         Reply &&
         <div className="shadow px-3 py-1 bg-zinc-100 flex items-center gap-2">
@@ -96,7 +101,12 @@ function InputContainer() {
         {
           !startRecording &&
           <form onSubmit={SendMessage} className="px-4 py-1 flex items-center bg-white rounded-full shadow-2xl w-full">
-            <BiPlus size={24} />
+            <button onClick={(e: any) => {
+              e.preventDefault();
+              setShowMediaOptions(true);
+            }} className={`active:bg-transparent hover:bg-zinc-100 p-2 rounded-full`}>
+              <BiPlus size={24} />
+            </button>
             <input value={message} required onChange={(e: any) => setMessage(e.target.value)} type="text" placeholder="Type a message" className="px-3 py-2 w-full outline-none" />
           </form>
         }

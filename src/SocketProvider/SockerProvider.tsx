@@ -17,6 +17,7 @@ const ENDPOINTS = import.meta.env.VITE_API_SOCKET_URL;
 function SockerProvider({ children }: SocketProviderProps) {
 
 
+  const [file, setFile] = useState<any>(null);
   const [err, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const token: string | null = useSelector((state: RootState) => {
@@ -97,7 +98,7 @@ function SockerProvider({ children }: SocketProviderProps) {
   else {
     const socket: any = io(ENDPOINTS);
     return (
-      <SocketContext.Provider value={{ socket: socket }}>
+      <SocketContext.Provider value={{ socket: socket, file: file, setFile: setFile }}>
         {children}
       </SocketContext.Provider>
     )

@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react"
 import { BiCopy, BiReply, BiSmile } from "react-icons/bi";
 import { BsTrash } from "react-icons/bs";
 import { useDispatch, useSelector } from "react-redux";
-import { addToSelectedMessage, setMessageId, toggleForwardMessage, toggleReply, toggleSelectMessage } from "../../redux/message";
+import { addToSelectedMessage, setMessageId, toggleForwardMessage, toggleReply, toggleSelectMessage, toggleShowMessageInfo } from "../../redux/message";
 import { TbArrowForwardUpDouble } from "react-icons/tb";
 import type { RootState } from "../../redux/Store";
 import { IoMdInformationCircleOutline } from "react-icons/io";
@@ -51,7 +51,11 @@ function MessageOption({ showMessageOption, setShowMessageOption, ItemId }: any)
         <>
             <div ref={MessageOptionRef} onClick={() => setShowMessageOption(false)} className="flex flex-col bg-white shadow-2xl p-3 rounded-xl w-fit absolute z-50">
                 <div className="flex flex-col gap-1">
-                    <button className="flex items-center gap-1 pl-2 pr-18 py-2 hover:bg-zinc-100 rounded-md active:bg-transparent">
+                    <button onClick={() => {
+                        dispatch(setMessageId(ItemId));
+                        setShowMessageOption(false);
+                        dispatch(toggleShowMessageInfo());
+                    }} className="flex items-center gap-1 pl-2 pr-18 py-2 hover:bg-zinc-100 rounded-md active:bg-transparent">
                         <IoMdInformationCircleOutline />
                         Info
                     </button>

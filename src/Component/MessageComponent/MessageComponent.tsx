@@ -1,12 +1,10 @@
 
 import { useSelector } from "react-redux"
 import type { RootState } from "../../redux/Store"
-import RenderMessage from "./RenderMessage";
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef } from "react";
 import { AxiosVite } from "../../utils/Axios";
 import { SocketContext } from "../../SocketProvider/SockerProvider";
-import RenderAudio from "../MediaComponent/RenderAudio";
-import RenderMessageDate from "./RenderMessageDate";
+import RenderMessage from "../ChatComponent/RenderMessage";
 
 
 type Item = {
@@ -18,7 +16,6 @@ type Item = {
 }
 function MessageComponent() {
 
-  const [previousDate, setPreviousDate] = useState<any>(null);
 
   const userData: any = useSelector((state: RootState) => {
     return state.user.userData
@@ -79,7 +76,6 @@ function MessageComponent() {
   const FilterMessage: any = Messages.filter((item: any) => item.consumer == recipentName || item.publisher == recipentName);
 
 
-
   if (FilterMessage.length <= 0) {
     return (
       <div className="h-full w-full flex justify-center items-center">
@@ -92,24 +88,10 @@ function MessageComponent() {
       <div id="Message-Container" ref={MessageContainerRef} className="h-full w-full py-14 px-4 md:py-24 xl:px-16 flex flex-col gap-8 overflow-y-auto Scroll-Container bg-zinc-50">
         {
           FilterMessage.map((item: Item, index: number) => {
-            if (item?.mediaType) {
-              return (
-                <div key={index}>
-                  <RenderMessageDate createdAt={item?.createdAt} previousDate={previousDate} setPreviousDate={setPreviousDate} />
-                  <RenderAudio item={item} />
-                </div>
-              )
-            }
-            else {
-              return (
-                <div key={index} >
-                  <RenderMessageDate createdAt={item?.createdAt} previousDate={previousDate} setPreviousDate={setPreviousDate} />
-                  <RenderMessage item={item} />
-                </div>
-              )
-            }
-          })
-        }
+            return (
+              <RenderMessage key={index} item={item} />
+            )
+          })}
       </div>
     )
   }

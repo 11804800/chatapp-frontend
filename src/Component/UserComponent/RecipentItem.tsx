@@ -4,11 +4,12 @@ import type { RootState } from "../../redux/Store";
 import { useContext, useEffect } from "react";
 import { SocketContext } from "../../SocketProvider/SockerProvider";
 import { GetDateAndTime } from "../../utils/DateAndTimeFormat";
-import { FaUser } from "react-icons/fa";
+import { FaUser, FaVideo } from "react-icons/fa";
 import { BsMic } from "react-icons/bs";
 import { IoCheckbox } from "react-icons/io5";
 import { MdOutlineCheckBoxOutlineBlank } from "react-icons/md";
 import { addToSelectContact } from "../../redux/Contact";
+import { IoMdPhotos } from "react-icons/io";
 
 
 function RecipentItem({ item }: any) {
@@ -54,7 +55,6 @@ function RecipentItem({ item }: any) {
     }, [item, recipientName]);
 
 
-
     return (
         <div className={`w-full flex gap-1 hover:bg-zinc-200 p-2 rounded-lg ${!selectContact && recipientName == item.userId._id && "bg-zinc-200"} ${SelectedContact.includes(item?.userId._id) && "bg-green-400/25"} `} onClick={() => {
             if (!selectContact) {
@@ -79,20 +79,27 @@ function RecipentItem({ item }: any) {
                     item?.userId?.image ?
                         <img src={import.meta.env.VITE_IMAGE_URL + item?.userId?.image} className="w-15 h-15 rounded-full shrink-0 p-1 object-cover" />
                         :
-                        <div className="bg-zinc-200 p-3 rounded-full text-zinc-600">
+                        <div className={` ${!selectContact && recipientName == item.userId._id ? "bg-white" : "bg-zinc-200"} p-3 rounded-full text-zinc-600`}>
                             <FaUser size={28} />
                         </div>
                 }
+                {item?.userId.online && <span className="h-[8px] w-[8px] bg-green-700 rounded-full absolute right-1 top-1"></span>}
             </div>
             <div className="flex flex-col w-full p-2">
                 <div className="flex justify-between w-full items-center">
-                    <p className="font-medium text-sm capitalize">{item.userId?.firstname}{" "}{item.userId?.lastname}</p>
-                    <p className="text-[12px]">Yesterday</p>
+                    <p className="font-medium text-sm capitalize line-clamp-1">{item.userId?.firstname}{" "}{item.userId?.lastname}</p>
+                    <p className="text-[10px]">{item?.userId?.online ? "online" : item?.userId.onlineTime && GetDateAndTime(item?.userId.onlineTime)}</p>
                 </div>
                 <div className="flex justify-between w-full items-center pr-1 pt-2">
                     <div className="flex items-center text-[13px] gap-2 w-[80%] sm:w-[60%]">
                         {
                             item?.mediaType == "audio" && <BsMic />
+                        }
+                        {
+                            item?.mediaType == "image" && <IoMdPhotos />
+                        }
+                        {
+                            item?.mediaType == "video" && <FaVideo />
                         }
                         <p className=" line-clamp-1 ">{item?.lastMessage ? item?.lastMessage : item?.mediaDuration}</p>
                     </div>

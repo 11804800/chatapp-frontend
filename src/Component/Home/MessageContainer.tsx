@@ -4,6 +4,7 @@ import MessageComponent from "../MessageComponent/MessageComponent"
 import type { RootState } from "../../redux/Store";
 import RecipentHeader from "../UserComponent/RecipentHeader";
 import ContactInfo from "../UserComponent/ContactInfo";
+import UploadMedia from "../InputComponent/UploadMedia";
 
 
 function MessageContainer() {
@@ -16,6 +17,10 @@ function MessageContainer() {
     return state.contact.showContactInfo
   });
 
+  const uploadMedia: boolean = useSelector((state: RootState) => {
+    return state.message.uploadMedia
+  });
+
   if (recipientName) {
     return (
       <div className='w-full h-full flex flex-col border-l-[1px] border-zinc-200 relative'>
@@ -24,6 +29,9 @@ function MessageContainer() {
         <InputContainer />
         {
           ShowContactInfo && <ContactInfo />
+        }
+        {
+          uploadMedia && <UploadMedia />
         }
       </div>
     )

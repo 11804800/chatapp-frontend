@@ -81,7 +81,7 @@ function HomePage() {
 
 
   useEffect(() => {
-    socket.emit("connection", { id: userData._id });
+
     socket.on("new-message", (data: any) => {
       const publisherId = data.data.publisher;
       const contactExists = contact.some((item: any) => item.userId._id === publisherId);

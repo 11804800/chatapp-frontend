@@ -7,7 +7,8 @@ interface MessagesInterface {
     messageId: string,
     forwardMessage: boolean,
     reply: boolean,
-    showMessageInfo: boolean
+    showMessageInfo: boolean,
+    uploadMedia: boolean
 }
 
 const initialState: MessagesInterface = {
@@ -17,13 +18,17 @@ const initialState: MessagesInterface = {
     messageId: "",
     forwardMessage: false,
     reply: false,
-    showMessageInfo: false
+    showMessageInfo: false,
+    uploadMedia: false
 }
 
 const MessageSlice = createSlice({
     name: "message",
     initialState,
     reducers: {
+        toggleUploadMedia: (state) => {
+            state.uploadMedia = !state.uploadMedia
+        },
         toggleShowMessageInfo: (state) => {
             state.showMessageInfo = !state.showMessageInfo
         },
@@ -88,6 +93,7 @@ const MessageSlice = createSlice({
 
 export default MessageSlice.reducer;
 export const {
+    toggleUploadMedia,
     toggleShowMessageInfo,
     setMessageId,
     setMessage,
