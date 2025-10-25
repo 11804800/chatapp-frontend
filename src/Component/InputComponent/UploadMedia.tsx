@@ -11,21 +11,21 @@ import { setLastMessage } from "../../redux/User";
 function RenderMedia({ mediaType, media }: any) {
     if (mediaType.includes("audio")) {
         return (
-            <div className="p-2 flex items-center justify-center h-[65%] w-full">
+            <div className="p-2 flex items-center justify-center h-[58%] w-full">
                 <audio src={media} controls />
             </div>
         )
     }
     else if (mediaType.includes("image")) {
         return (
-            <div className="p-2 flex items-center justify-center h-[65%] w-full">
+            <div className="p-2 flex items-center justify-center h-[58%] w-full">
                 <img src={media} className="object-contain w-[80%] h-[80%] shadow" />
             </div>
         )
     }
     else {
         return (
-            <div className="p-2 flex items-center justify-center h-[65%] w-full">
+            <div className="p-2 flex items-center justify-center h-[58%] w-full">
                 <video controls src={media} className="object-contain w-[80%] h-[80%] shadow" />
             </div>
         )

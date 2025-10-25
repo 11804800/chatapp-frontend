@@ -69,7 +69,7 @@ function MainPage() {
     }
 
     return (
-        <div className={`shrink-0 w-full md:w-[350px] relative lg:w-[450px] xl:w-[510px] h-full ${recipientName ? "hidden md:flex" : "flex"} flex-col`}>
+        <div className={`shrink-0 w-full relative lg:w-[450px] xl:w-[510px] h-full ${recipientName ? "hidden lg:flex" : "flex"} flex-col`}>
             <div className="w-full flex justify-between items-center px-4 py-3 shrink-0">
                 <p className="font-bold text-[22px] leading-[0.8]"> ChatApp</p>
                 {

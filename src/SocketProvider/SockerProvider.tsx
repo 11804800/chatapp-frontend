@@ -89,7 +89,7 @@ function SockerProvider({ children }: SocketProviderProps) {
         <div className="xl:h-screen  p-5 flex justify-center items-start flex-col gap-2">
           <h1 className="font-medium text-3xl sm:text-4xl text-nowrap">Internal Server Error</h1>
           <p className="font-regular text-zinc-400">Something bad happend <br /> at the server or Server is not running</p>
-          <button onClick={() => window.location.reload()} className="px-5 py-2 bg-blue-950 text-white">Refresh</button>
+          <button onClick={() => window.location.reload()} className="px-5 py-2 bg-blue-950 text-white active:scale-90">Refresh</button>
         </div>
         <img src="../Error500.png" className="object-contain h-[50%] xl:h-[70%]" />
       </div>

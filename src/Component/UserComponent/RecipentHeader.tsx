@@ -206,7 +206,7 @@ function RecipentHeader() {
   return (
     <>
       <div className="shrink-0 w-full p-2 flex items-center shadow-lg">
-        <button className="flex md:hidden" onClick={() => dispatch(setRecipientName(""))}>
+        <button className="flex lg:hidden" onClick={() => dispatch(setRecipientName(""))}>
           <BiArrowBack size={24} />
         </button>
         {

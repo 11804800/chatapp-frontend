@@ -8,7 +8,8 @@ interface MessagesInterface {
     forwardMessage: boolean,
     reply: boolean,
     showMessageInfo: boolean,
-    uploadMedia: boolean
+    uploadMedia: boolean,
+    showCarousel: boolean
 }
 
 const initialState: MessagesInterface = {
@@ -19,7 +20,8 @@ const initialState: MessagesInterface = {
     forwardMessage: false,
     reply: false,
     showMessageInfo: false,
-    uploadMedia: false
+    uploadMedia: false,
+    showCarousel: false
 }
 
 const MessageSlice = createSlice({
@@ -87,12 +89,20 @@ const MessageSlice = createSlice({
         },
         filterMessage: (state, action: PayloadAction<any>) => {
             state.messages = state.messages.filter((item: any) => !(item.consumer === action.payload || item.publisher === action.payload));
+        },
+        toggleCarousel: (state) => {
+            state.showCarousel = !state.showCarousel
+        },
+        updateReaction: (state, action: PayloadAction<any>) => {
+            const index = state.messages.findIndex((item: any) => item._id == action.payload.messageId);
+            state.messages[index].reaction = action.payload.reaction;
         }
     }
 })
 
 export default MessageSlice.reducer;
 export const {
+    toggleCarousel,
     toggleUploadMedia,
     toggleShowMessageInfo,
     setMessageId,
@@ -106,5 +116,5 @@ export const {
     addToSelectedMessage,
     filterMessage,
     setSelectedMessages,
-    toggleForwardMessage
+    toggleForwardMessage, updateReaction
     , toggleReply } = MessageSlice.actions;

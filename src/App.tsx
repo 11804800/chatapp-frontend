@@ -12,6 +12,7 @@ import StatusView from "./Component/StatusComponent/StatusView";
 import LoadingComponent from "./Component/LoadingComponent";
 import ForwardModal from "./Component/Modals/ForwardModal";
 import MessageInfo from "./Component/Modals/MessageInfo";
+import MediaCarousel from "./Component/Modals/MediaCarousel";
 const HomeLayout = lazy(() => import("./Layout/HomeLayout"));
 const SettingPage = lazy(() => import("./Pages/SettingPage"));
 const StatusPage = lazy(() => import("./Pages/StatusPage"));
@@ -59,9 +60,16 @@ function App() {
     return state.message.showMessageInfo
   });
 
+  const showCarousel: boolean = useSelector((state: RootState) => {
+    return state.message.showCarousel
+  });
 
   return (
     <>
+      {
+        showCarousel &&
+        <MediaCarousel />
+      }
       {
         ShowMessageInfo && <MessageInfo />
       }

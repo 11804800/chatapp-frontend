@@ -24,7 +24,7 @@ function MessageOption({ showMessageOption, setShowMessageOption, ItemId }: any)
             }
             else {
                 MessageOptionRef.current.style.removeProperty("bottom");
-                MessageOptionRef.current.style.top = "32px";
+                MessageOptionRef.current.style.top = "0px";
             }
         }
 

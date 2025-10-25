@@ -12,6 +12,13 @@ function RecipentList() {
         return state.user.contact
     });
 
+    const sortedData: any = Contact.slice().sort((a: any, b: any) => {
+        const aTime = a.lastMessageTime ? new Date(a.lastMessageTime).getTime() : 0;
+        const bTime = b.lastMessageTime ? new Date(b.lastMessageTime).getTime() : 0;
+        return bTime - aTime;
+    })
+
+
 
     if (Contact.length <= 0) {
         return (
@@ -25,7 +32,7 @@ function RecipentList() {
         return (
             <div className="flex flex-col gap-2">
                 {
-                    Contact.map((item: any, index: number) => {
+                    sortedData.map((item: any, index: number) => {
                         return (
                             <RecipentItem key={index} item={item} />
                         )

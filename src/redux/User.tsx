@@ -82,9 +82,7 @@ const UserSlice = createSlice({
             state.contact = state.contact.filter((item: any) => !action.payload.includes(item.userId._id));
         },
         updateUserOnlineStatus: (state, action: PayloadAction<any>) => {
-            console.log(action.payload);
             const index = state.contact.findIndex((item: any) => item.userId._id == action.payload.id);
-            console.log(index, index >= 0);
             if (index >= 0) {
                 state.contact[index].userId.online = action.payload.online;
                 state.contact[index].userId.onlineTime = action.payload.onlineTime;

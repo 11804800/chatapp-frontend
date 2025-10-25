@@ -34,9 +34,16 @@ function HomeLayout() {
             }));
         });
 
-        return () => {
+
+        const handleBeforeUnload = () => {
             socket.disconnect();
         }
+
+        window.addEventListener('beforeunload', handleBeforeUnload);
+
+        return () => {
+            window.removeEventListener('beforeunload', handleBeforeUnload);
+        };
     }, []);
 
     return (

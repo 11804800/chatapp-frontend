@@ -16,7 +16,6 @@ type Item = {
 }
 function MessageComponent() {
 
-
   const userData: any = useSelector((state: RootState) => {
     return state.user.userData
   });

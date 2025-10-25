@@ -38,7 +38,7 @@ function MessageContainer() {
   }
   else {
     return (
-      <div className="h-full w-full border-l-[1px] border-zinc-200 hidden md:flex justify-center items-center">
+      <div className="h-full w-full border-l-[1px] border-zinc-200 hidden lg:flex justify-center items-center">
         <div>
           <p className="font-medium text-xl">Select or Start New Chat</p>
         </div>

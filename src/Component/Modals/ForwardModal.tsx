@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from "react-redux"
 import type { RootState } from "../../redux/Store"
 import { setContactData } from "../../redux/Contact";
 import gsap from "gsap";
-import { useGSAP } from "@gsap/react";
 import { AxiosVite } from "../../utils/Axios";
 import { useContext, useEffect, useState } from "react";
 import { FaUser } from "react-icons/fa";
@@ -21,6 +20,7 @@ function ForwardModal() {
     const ContactData = useSelector((state: RootState) => {
         return state.contact.Data
     });
+
 
     useEffect(() => {
         async function FetchAllUser() {
@@ -55,21 +55,6 @@ function ForwardModal() {
     });
 
     const dispatch = useDispatch();
-
-    useGSAP(() => {
-        gsap.from(".modal-container", {
-            background: "white",
-            opacity: .5,
-            duration: .1
-        });
-        gsap.from(".contact-modal", {
-            height: "10%",
-            width: "10%",
-            opacity: 0,
-            duration: .1,
-        })
-    })
-
 
 
     function CloseModal() {
@@ -123,6 +108,11 @@ function ForwardModal() {
                 mediaDuration: ForwardMessage?.mediaDuration,
                 mediaType: ForwardMessage?.mediaType,
             }
+            if (socket && socket.connected) {
+                socket.emit("send-message", body);
+            } else {
+                console.log('Socket not connected');
+            }
             if (contactExists) {
                 dispatch(addNewMessage(body));
                 dispatch(setLastMessage({
@@ -169,7 +159,6 @@ function ForwardModal() {
                     console.log(err)
                 });
             }
-            socket.emit("send-message", body);
         });
         dispatch(toggleForwardMessage());
     }
@@ -178,7 +167,7 @@ function ForwardModal() {
     if (Loading) {
         return (
             <div className="modal-container h-screen w-full bg-black/25 fixed top-0 z-50 flex justify-center items-center p-4">
-                <div className="contact-modal origin-center overflow-hidden w-[550px] h-[550px] bg-white shadow-xl rounded-xl flex flex-col justify-center items-center">
+                <div className="contact-modal origin-center overflow-hidden h-full w-full md:w-[600px] md:h-[550px] bg-white shadow-xl rounded-xl flex flex-col justify-center items-center">
                     <p>Loading...</p>
                 </div>
             </div>
@@ -186,8 +175,8 @@ function ForwardModal() {
     }
     else {
         return (
-            <div className="modal-container h-screen w-full bg-black/25 fixed top-0 z-50 flex justify-center items-center p-4">
-                <div className="contact-modal origin-center overflow-hidden w-[550px] h-[550px] bg-white shadow-xl rounded-xl flex flex-col">
+            <div className="modal-container h-screen w-full  bg-black/25 fixed top-0 z-50 flex justify-center items-center md:p-4">
+                <div className="contact-modal origin-center overflow-hidden h-full w-full md:w-[600px] md:h-[550px] bg-white shadow-xl md:rounded-xl flex flex-col">
                     <div className="flex justify-between w-full py-4 px-4">
                         <h1 className="text-xl font-medium">
                             Forward Message to
@@ -198,7 +187,7 @@ function ForwardModal() {
                     </div>
                     <div className="px-4 py-2 overflow-y-auto Scroll-Container flex-1 flex flex-col gap-1">
                         {
-                            ContactData.map((item: any, index: number) => {
+                            ContactData.filter((item: any) => item?._id != UserData?._id).map((item: any, index: number) => {
                                 return (
                                     <div onClick={() => {
                                         addToForwardList(item?._id)
