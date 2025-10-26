@@ -8,13 +8,23 @@ import { useState } from "react";
 import { IoChevronBackCircle } from "react-icons/io5";
 import { IoChevronForwardCircle } from "react-icons/io5";
 import { DateFormatter, TimeFormatter } from "../../utils/Formatter";
+import VideoPlayerComponent from "../VideoplayerComponent/VideoPlayerComponent";
 
 function RenderMedia({ item }: any) {
-    return (
-        <div className="w-full h-full">
-            <img src={import.meta.env.VITE_IMAGE_URL + "/" + item?.media} className="w-full h-full object-contain" />
-        </div>
-    )
+    if (item?.mediaType == "image") {
+        return (
+            <div className="w-full h-full">
+                <img src={import.meta.env.VITE_IMAGE_URL + "/uploads/" + item?.media} className="w-full h-full object-contain" />
+            </div>
+        )
+    }
+    else {
+        return (
+            <div className="w-full h-full flex justify-center">
+                <VideoPlayerComponent media={item?.media} />
+            </div>
+        )
+    }
 }
 
 function MediaCarousel() {
@@ -40,7 +50,7 @@ function MediaCarousel() {
     const MediaMessages: any = FilteredMessages.filter((item: any) => item?.mediaType == "image" || item?.mediaType == "video");
 
     function Download() {
-        const url = `${import.meta.env.VITE_IMAGE_URL}/${MediaMessages[mediaIndex]?.media}`;
+        const url = `${import.meta.env.VITE_IMAGE_URL}/uploads/${MediaMessages[mediaIndex]?.media}`;
         const link: any = document.createElement("a");
         link.href = url;
         link.download = MediaMessages[mediaIndex]?.media;
@@ -89,11 +99,20 @@ function MediaCarousel() {
             <div className="w-full p-1 hidden md:flex gap-2 justify-center">
                 {
                     MediaMessages?.map((item: any, index: number) => {
-                        return (
-                            <div onClick={() => setIndex(index)} key={item?._id}>
-                                <img src={import.meta.env.VITE_IMAGE_URL + "/" + item?.media} className="w-[50px] h-[50px] rounded-md object-cover" />
-                            </div>
-                        )
+                        if (item?.mediaType == "image") {
+                            return (
+                                <div onClick={() => setIndex(index)} key={item?._id}>
+                                    <img src={import.meta.env.VITE_IMAGE_URL + "/uploads/" + item?.media} className="w-[50px] h-[50px] rounded-md object-cover" />
+                                </div>
+                            )
+                        }
+                        else {
+                            return (
+                                <div onClick={() => setIndex(index)} key={item?._id}>
+                                    <video src={import.meta.env.VITE_IMAGE_URL + "/uploads/" + item?.media} className="w-[50px] h-[50px] rounded-md object-cover" />
+                                </div>
+                            )
+                        }
                     })
                 }
             </div>

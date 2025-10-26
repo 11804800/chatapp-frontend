@@ -116,15 +116,17 @@ function InputContainer() {
       <div className={`${!startRecording && "py-2 px-4"} bg-zinc-100 flex w-full gap-2 items-center`}>
         {
           !startRecording &&
-          <form onSubmit={SendMessage} className="px-4 py-1 flex items-center bg-white rounded-full shadow-2xl w-full">
+          <div className="px-2 py-1 flex items-center bg-white rounded-full shadow-2xl w-full">
             <button onClick={(e: any) => {
               e.preventDefault();
               setShowMediaOptions(true);
             }} className={`active:bg-transparent hover:bg-zinc-100 p-2 rounded-full`}>
               <BiPlus size={24} />
             </button>
-            <input value={message} required onChange={(e: any) => setMessage(e.target.value)} type="text" placeholder="Type a message" className="px-3 py-2 w-full outline-none" />
-          </form>
+            <form className="w-full" onSubmit={SendMessage} >
+              <input value={message} required onChange={(e: any) => setMessage(e.target.value)} type="text" placeholder="Type a message" className="px-3 py-2 w-full outline-none" />
+            </form>
+          </div>
         }
         {
           !message && MessageId == "" ?

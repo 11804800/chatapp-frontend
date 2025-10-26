@@ -19,12 +19,10 @@ function MessageOption({ showMessageOption, setShowMessageOption, ItemId }: any)
             const Options = MessageOptionRef.current;
             const rect = Options.getBoundingClientRect();
             if (rect.top + MessageOptionRef.current.clientHeight > MessageContainer.clientHeight) {
-                MessageOptionRef.current.style.removeProperty("top");
-                MessageOptionRef.current.style.bottom = "32px";
+                MessageOptionRef.current.style.top = `-${MessageOptionRef.current.clientHeight}px`;
             }
             else {
-                MessageOptionRef.current.style.removeProperty("bottom");
-                MessageOptionRef.current.style.top = "0px";
+                MessageOptionRef.current.style.top = "32px";
             }
         }
 
@@ -47,9 +45,13 @@ function MessageOption({ showMessageOption, setShowMessageOption, ItemId }: any)
 
     const FilterMessage: any = Messages.find((item: any) => item._id == ItemId);
 
+    const RecipentName: any = useSelector((state: RootState) => {
+        return state.user.recipientName
+    });
+
     return (
         <>
-            <div ref={MessageOptionRef} onClick={() => setShowMessageOption(false)} className="flex flex-col bg-white shadow-2xl p-3 rounded-xl w-fit absolute z-50">
+            <div ref={MessageOptionRef} onClick={() => setShowMessageOption(false)} className={`flex flex-col bg-white shadow-2xl p-3 rounded-xl w-fit absolute z-50 ${FilterMessage?.consumer == RecipentName ? "right-0 xl:-right-10" : "-right-15 sm:-right-20 xl:-right-10"}`}>
                 <div className="flex flex-col gap-1">
                     <button onClick={() => {
                         dispatch(setMessageId(ItemId));
@@ -64,7 +66,7 @@ function MessageOption({ showMessageOption, setShowMessageOption, ItemId }: any)
                         React
                     </button>
                     {
-                        FilterMessage?.message &&
+                        !FilterMessage?.mediaType &&
                         <button onClick={() => {
                             navigator.clipboard.writeText(FilterMessage?.message);
                         }} className="text-nowrap hover:bg-zinc-100 active:bg-white w-full pl-2 pr-18 py-2 text-left text-sm rounded-md flex items-center gap-2">

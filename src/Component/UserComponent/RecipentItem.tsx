@@ -91,20 +91,20 @@ function RecipentItem({ item }: any) {
                     <p className="text-[10px]">{item?.userId?.online ? "online" : item?.userId.onlineTime && GetDateAndTime(item?.userId.onlineTime)}</p>
                 </div>
                 <div className="flex justify-between w-full items-center pr-1 pt-2">
-                    <div className="flex items-center text-[13px] gap-2 w-[80%] sm:w-[60%]">
+                    <div className="flex items-center text-[13px] gap-2 w-[93%]  sm:w-[60%]">
                         {
-                            item?.mediaType == "audio" && <BsMic />
+                            item?.mediaType == "audio" && <BsMic size={15} />
                         }
                         {
-                            item?.mediaType == "image" && <IoMdPhotos />
+                            item?.mediaType == "image" && <IoMdPhotos size={18} />
                         }
                         {
-                            item?.mediaType == "video" && <FaVideo />
+                            item?.mediaType == "video" && <FaVideo size={18} />
                         }
                         <p className=" line-clamp-1 ">{item?.lastMessage ? item?.lastMessage : item?.mediaDuration}</p>
                     </div>
                     <div className="flex gap-2 items-center">
-                        <p className="text-[10px]">{Time}</p>
+                        <p className="text-[10px] hidden sm:flex">{Time}</p>
                         {
                             item?.unseenmessagecount >= 1 &&
                             <p className="bg-green-800 text-white px-2 py-[2px] text-[11px] font-medium rounded-full ">{item?.unseenmessagecount}</p>

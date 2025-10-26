@@ -53,22 +53,22 @@ function MessageReactions({ user, setShowReactionOption, ItemId }: any) {
     return (
         <div ref={OptionRef} className={`absolute z-[999] -top-[45px] md:-top-[32px] ${user == RecientName ? "right-28 md:right-40" : "left-28 md:left-40"} bg-white shadow rounded-full px-4 py-2 flex gap-3`}>
             <button onClick={() => SentReaction("sad")}>
-                <img src="/sad.png" className="w-7 h-7" />
+                <img src="/sad.png" className="w-7 h-7 object-contain" />
             </button>
             <button onClick={() => SentReaction("shocked")}>
-                <img src="/shocked.png" className="w-7 h-7" />
+                <img src="/shocked.png" className="w-7 h-7 object-contain" />
             </button>
             <button onClick={() => SentReaction("heart")}>
-                <img src="/heart.png" className="w-7 h-7" />
+                <img src="/heart.png" className="w-7 h-7 object-contain" />
             </button>
             <button onClick={() => SentReaction("thumbsup")}>
-                <img src="/thumbsup.png" className="w-full h-7" />
+                <img src="/thumbsup.png" className="w-full h-7 object-contain" />
             </button>
             <button onClick={() => SentReaction("namaste")}>
-                <img src="/namaste.png" className="w-full h-7" />
+                <img src="/namaste.png" className="w-full h-7 object-contain" />
             </button>
             <button onClick={() => SentReaction("shocked2")}>
-                <img src="/shocked2.png" className="w-full h-7" />
+                <img src="/shocked2.png" className="w-full h-7 object-contain" />
             </button>
         </div>
     )

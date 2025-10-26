@@ -11,7 +11,7 @@ import { setLastMessage } from "../../redux/User";
 function RenderMedia({ mediaType, media }: any) {
     if (mediaType.includes("audio")) {
         return (
-            <div className="p-2 flex items-center justify-center h-[58%] w-full">
+            <div className="p-2 flex items-center justify-center h-[68%] bg-zinc-200 w-full">
                 <audio src={media} controls />
             </div>
         )
@@ -74,15 +74,20 @@ function UploadMedia() {
         })
     }
 
+
+
     return (
         <div className='p-2 h-full w-full absolute top-19 bg-white left-0 z-[999] flex flex-col gap-1'>
             <div className="flex w-full justify-end p-2">
                 <button onClick={() => dispatch(toggleUploadMedia())} className="p-2 rounded-full hover:bg-zinc-200 active:bg-transparent "><FaTimes size={24} /></button>
             </div>
             <RenderMedia mediaType={file.type} media={URL.createObjectURL(file)} />
-            <div className="w-full flex justify-center items-center py-3">
-                <input type="text" value={message} onChange={(e: any) => setMessage(e.target.value)} placeholder="type a message" className="bg-zinc-100 rounded-md px-4 py-3 w-[90%]" />
-            </div>
+            {
+                !file.type.includes("audio") &&
+                <div className="w-full flex justify-center items-center py-3">
+                    <input type="text" value={message} onChange={(e: any) => setMessage(e.target.value)} placeholder="type a message" className="bg-zinc-100 rounded-md px-4 py-3 w-[90%]" />
+                </div>
+            }
             <div className="w-full flex justify-end px-5 py-2 ">
                 <button onClick={PostMedia} className="bg-green-800 text-white p-2 rounded-full hover:bg-green-700 active:bg-green-800 shadow-md active:shadow-none">
                     <IoSend size={26} />

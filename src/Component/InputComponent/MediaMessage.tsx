@@ -8,16 +8,17 @@ import { SocketContext } from "../../SocketProvider/SockerProvider";
 function MediaMessage({ setShowMediaOptions }: any) {
 
     const [FileUploadError, setFileUploadError] = useState<string | null>(null);
-    const OptionsRef = useRef<any>(null);
+    const UploadOptionsRef = useRef<any>(null);
     const AudioInputRef = useRef<any>(null);
     const MediaRef = useRef<any>(null);
     const dispatch = useDispatch();
 
 
+
     const { setFile }: any = useContext(SocketContext);
     useEffect(() => {
         const handler = (e: any) => {
-            if (!OptionsRef.current.contains(e.target)) {
+            if (!UploadOptionsRef.current.contains(e.target)) {
                 setShowMediaOptions(false);
             }
         }
@@ -45,6 +46,24 @@ function MediaMessage({ setShowMediaOptions }: any) {
 
     };
 
+    const handleFileChange2 = (e: any) => {
+        const file = e.target.files[0];
+        const isImageOrVideo = file.type.startsWith('audio/');
+        const isSizeValid = file.size <= 10 * 1024 * 1024;
+        if (!isImageOrVideo) {
+            setFileUploadError("File must be Audio,Image or video");
+
+        }
+        else if (!isSizeValid) {
+            setFileUploadError("File must be less than 10mb");
+        }
+        else {
+            setFile(e.target.files[0]);
+            dispatch(toggleUploadMedia());
+        }
+
+    };
+
     useEffect(() => {
         if (FileUploadError) {
             setTimeout(() => {
@@ -56,12 +75,11 @@ function MediaMessage({ setShowMediaOptions }: any) {
 
     return (
         <>
-            <div ref={OptionsRef} className="bg-white shadow-md w-fit absolute -top-34 gap-2 rounded-xl left-4 p-5 flex flex-col">
-                <input type="file" onChange={handleFileChange} ref={MediaRef} accept="video/*,image/*" />
-                <input type="file" onChange={handleFileChange} ref={AudioInputRef} accept="audio/*" style={{ display: "none" }} />
+            <div ref={UploadOptionsRef} className="bg-white shadow-md w-fit absolute -top-34 gap-2 rounded-xl left-4 p-5 flex flex-col">
+                <input type="file" onChange={handleFileChange} ref={MediaRef} accept="video/*,image/*" className="hidden" />
+                <input type="file" onChange={handleFileChange2} ref={AudioInputRef} accept="audio/*" className="hidden" />
                 <button onClick={() => {
                     MediaRef.current.click();
-                    setShowMediaOptions(false);
                 }} className="flex items-center gap-2 font-medium active:bg-transparent hover:bg-zinc-200 px-4 py-2 rounded-md">
                     <IoMdPhotos />
                     Photos & Videos
@@ -69,7 +87,6 @@ function MediaMessage({ setShowMediaOptions }: any) {
                 <hr className="text-zinc-300" />
                 <button onClick={() => {
                     AudioInputRef.current.click();
-                    setShowMediaOptions(false);
                 }} className="flex items-center gap-2 font-medium active:bg-transparent hover:bg-zinc-200 px-4 py-2 rounded-md">
                     <FaHeadphones />
                     Audio

@@ -20,7 +20,7 @@ function RenderAudio({ media }: any) {
     useEffect(() => {
         const Options: any = FormWaveSurfOptions(WaveSurfRef.current);
         WaveFormRef.current = WaveSurfer.create(Options);
-        WaveFormRef.current.load(import.meta.env.VITE_AUDIO_URL + media);
+        WaveFormRef.current.load(import.meta.env.VITE_AUDIO_URL + "/uploads/" + media);
 
         WaveFormRef.current.on("ready", () => {
             setDuration(WaveFormRef.current.getDuration())
@@ -54,7 +54,7 @@ function RenderAudio({ media }: any) {
                     }
                 </button>
                 <div className="flex items-center overflow-hidden h-[40px]">
-                    <div className="w-[180px]" ref={WaveSurfRef}></div>
+                    <div className="w-[140px] md:w-[180px]" ref={WaveSurfRef}></div>
                 </div>
             </div>
             <div className="text-[13px] text-zinc-600 absolute bottom-0 left-16">{playing ? FormatTime(currentDuration) : FormatTime(duration)}</div>

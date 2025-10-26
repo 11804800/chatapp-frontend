@@ -66,7 +66,7 @@ function RenderMessage({ item }: any) {
 
     if (item?.consumer == RecipentName) {
         return (
-            <div className={`${SelectedMessages.includes(item._id) && "bg-green-300/35"} flex justify-end px-2 md:px-12 relative w-full items-center group gap-2`}>
+            <div className={`${SelectedMessages.includes(item._id) && "bg-green-300/35"}  flex justify-end px-2 md:px-12 relative w-full items-center group gap-2`}>
                 {
                     SelectMessage &&
                     <button onClick={() => dispatch(addToSelectedMessage(item?._id))} className="p-2 flex">
@@ -78,16 +78,23 @@ function RenderMessage({ item }: any) {
                         }
                     </button>
                 }
-                <button onClick={() => {
-                    setShowReactionOption(true);
-                }} className="text-zinc-500 group-hover:flex hidden justify-center items-center bg-white rounded-full drop-shadow p-1">
-                    <BiSmile />
-                </button>
-                {showReactionOption && <MessageReactions user={item?.consumer} setShowReactionOption={setShowReactionOption} ItemId={item?._id} />}
-                <div className="drop-shadow relative flex overflow-hidden max-w-[320px]">
-                    <button onClick={() => setShowMessageOption(true)} className="text-zinc-500 absolute right-3 z-[99] p-2 bg-[#d9fdd3] group-hover:flex hidden">
-                        <IoChevronDownOutline />
+                {
+                    !SelectMessage &&
+                    <button onClick={() => {
+                        setShowReactionOption(true);
+                    }} className="text-zinc-500 group-hover:flex hidden justify-center items-center bg-white rounded-full drop-shadow p-1">
+                        <BiSmile />
                     </button>
+                }
+                {showReactionOption && <MessageReactions user={item?.consumer} setShowReactionOption={setShowReactionOption} ItemId={item?._id} />}
+                {SelectedMessages.length == 1 && SelectedMessages.includes(item?._id) && <MessageReactions user={item?.consumer} setShowReactionOption={setShowReactionOption} ItemId={item?._id} />}
+                <div className="drop-shadow relative flex overflow-hidden max-w-[240px] sm:max-w-[320px]">
+                    {
+                        !SelectMessage &&
+                        <button onClick={() => setShowMessageOption(true)} className="text-zinc-500 absolute right-3 z-[99] p-2 bg-[#d9fdd3] group-hover:flex hidden">
+                            <IoChevronDownOutline />
+                        </button>
+                    }
                     <div className="bg-[#d9fdd3] rounded p-2">
                         {item?.forward && <div className="flex items-center gap-1 text-zinc-500 text-[11px]"><TbArrowForwardUpDouble />forwarded</div>}
                         {item?.reply && <ReplyMessage message={item.reply} />}
@@ -112,7 +119,7 @@ function RenderMessage({ item }: any) {
     }
     else {
         return (
-            <div className={`${SelectedMessages.includes(item._id) && "bg-green-300/35"} group gap-2 flex justify-start px-2 md:px-12 relative items-center`}>
+            <div className={`${SelectedMessages.includes(item._id) && "bg-green-300/35"} group gap-2 flex justify-start px-2 md:px-12 relative items-center ${SelectMessage ? "w-full" : "w-fit"}`}>
                 {
                     SelectMessage &&
                     <button onClick={() => dispatch(addToSelectedMessage(item?._id))} className="p-2 flex">
@@ -124,10 +131,11 @@ function RenderMessage({ item }: any) {
                         }
                     </button>
                 }
-                <div className="relative flex overflow-hidden drop-shadow max-w-[320px]">
-                    <button onClick={() => setShowMessageOption(true)} className="text-zinc-500 absolute right-0 z-[99] p-2 bg-white group-hover:flex hidden rounded">
-                        <IoChevronDownOutline />
-                    </button>
+                <div className="relative flex overflow-hidden drop-shadow max-w-[240px] sm:max-w-[320px]">
+                    {
+                        !SelectMessage && <button onClick={() => setShowMessageOption(true)} className="text-zinc-500 absolute right-0 z-[99] p-2 bg-white group-hover:flex hidden rounded">
+                            <IoChevronDownOutline />
+                        </button>}
                     <div className="rotate-45 translate-x-[8px] -translate-y-1.5 w-[12px] h-[12px] bg-white rounded"></div>
                     <div className="bg-white rounded p-2">
                         {item?.forward && <div className="flex items-center gap-1 text-zinc-500 text-[11px]"><TbArrowForwardUpDouble />forwarded</div>}
@@ -135,7 +143,7 @@ function RenderMessage({ item }: any) {
                         {item?.mediaType && <MediaContent item={item} />}
                         <div className="flex gap-3 pt-1 justify-between flex-col">
                             <p className={` text-black text-sm w-full  ${item?.mediaType ? "font-regular" : "font-medium"}`}>{item?.message}</p>
-                            <div className="w-full self-end flex items-end pl-3"><p className="text-[10px] font-medium text-nowrap text-zinc-500">{TimeFormatter(item?.createdAt)}</p></div>
+                            <div className="w-full self-end flex items-end pl-3"><p className="text-[10px] font-medium text-nowrap text-zinc-500 w-full justify-end flex">{TimeFormatter(item?.createdAt)}</p></div>
                         </div >
                     </div>
                 </div >
@@ -143,7 +151,7 @@ function RenderMessage({ item }: any) {
                 {showReactionOption && <MessageReactions user={item?.consumer} setShowReactionOption={setShowReactionOption} ItemId={item?._id} />}
                 <button onClick={() => {
                     setShowReactionOption(true);
-                }} className="text-zinc-500 group-hover:flex hidden justify-center items-center bg-white rounded-full drop-shadow p-1">
+                }} className="text-zinc-500 group-hover:visible invisible justify-center items-center bg-white rounded-full drop-shadow p-1">
                     <BiSmile />
                 </button>
                 {
