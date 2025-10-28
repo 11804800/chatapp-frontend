@@ -7,7 +7,7 @@ import { TbArrowForwardUpDouble } from "react-icons/tb";
 import type { RootState } from "../../redux/Store";
 import { IoMdInformationCircleOutline } from "react-icons/io";
 
-function MessageOption({ showMessageOption, setShowMessageOption, ItemId }: any) {
+function MessageOption({ showMessageOption, setShowMessageOption, ItemId, setShowReactionOption }: any) {
 
     const MessageOptionRef: any = useRef(null);
     const dispatch = useDispatch();
@@ -61,7 +61,7 @@ function MessageOption({ showMessageOption, setShowMessageOption, ItemId }: any)
                         <IoMdInformationCircleOutline />
                         Info
                     </button>
-                    <button className="flex gap-1 pl-2 pr-18 py-2  items-center hover:bg-zinc-100 rounded-md active:bg-transparent">
+                    <button onClick={() => setShowReactionOption(true)} className="flex gap-1 pl-2 pr-18 py-2  items-center hover:bg-zinc-100 rounded-md active:bg-transparent">
                         <BiSmile size={18} />
                         React
                     </button>

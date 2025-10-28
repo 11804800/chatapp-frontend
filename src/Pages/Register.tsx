@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react"
 import { Link } from "react-router"
-import Loading from "../Component/Authentication/Loading.js";
+import Loading from "../Component/LoadingComponent/Loading.js";
 import { AxiosVite } from "../utils/Axios.js";
 import { useDispatch } from "react-redux";
 import { SetUser } from "../redux/User.js";
-import ProfileSetup from "../Component/Authentication/ProfileSetup.js";
+import ProfileSetup from "../Component/ProfileSetupComponent/ProfileSetup.js";
 
 interface User {
   firstname: string,

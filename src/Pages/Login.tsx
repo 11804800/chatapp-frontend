@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import { GoEye, GoEyeClosed } from "react-icons/go";
 import { Link, useNavigate } from "react-router"
 import { useDispatch } from "react-redux";
 import { setToken, SetUser } from "../redux/User.js";
-import Loading from "../Component/Authentication/Loading.js";
+import Loading from "../Component/LoadingComponent/Loading.js";
 import { AxiosVite } from "../utils/Axios.js";
+import { VscEye, VscEyeClosed } from "react-icons/vsc";
 
 interface User {
   username: string;
@@ -94,11 +94,11 @@ function Login() {
               {
                 showPassword ?
                   <button onClick={() => { setShowPassword(false) }}>
-                    <GoEye />
+                    <VscEye size={21} />
                   </button>
                   :
                   <button onClick={() => setShowPassword(true)}>
-                    <GoEyeClosed />
+                    <VscEyeClosed size={21} />
                   </button>
               }
             </div>

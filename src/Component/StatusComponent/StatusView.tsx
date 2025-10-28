@@ -118,10 +118,10 @@ function StatusView() {
     }, [statusOptionActive]);
 
     useEffect(() => {
-        if (FilterStatus) {
+        if (FilterStatus && showStatus !== userData?._id) {
             if (!FilterStatus?.userId?.status[statusIndex]?.seen?.includes(userData?._id)) {
                 const body = {};
-                AxiosVite.put(`/status/${FilterStatus?.userId?.status[statusIndex]._id}`, body, {
+                AxiosVite.put(`/status/${FilterStatus?.userId?.status[statusIndex]?._id}`, body, {
                     headers: {
                         "Authorization": `Bearer ${token}`
                     }
@@ -144,6 +144,7 @@ function StatusView() {
             if (response) {
                 if (response.data) {
                     dispatch(deleteStatus(statusIndex));
+                    dispatch(setShowStatus(""));
                 }
             }
         }).catch((err: any) => console.log(err.response.data));
@@ -165,7 +166,7 @@ function StatusView() {
                             {
                                 MyStatus.map((item: any, index: number) => {
                                     return (
-                                        <div key={item._id} onClick={() => setStatusIndex(index)} className="w-full h-[10px] bg-zinc-50/30 rounded-2xl relative">
+                                        <div key={item?._id} onClick={() => setStatusIndex(index)} className="w-full h-[10px] bg-zinc-50/30 rounded-2xl relative">
                                             {index == statusIndex &&
                                                 <div className="w-0 h-[10px] rounded-2xl bg-white loading"></div>
                                             }

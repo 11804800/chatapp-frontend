@@ -4,7 +4,7 @@ import { AxiosVite } from "../utils/Axios";
 import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "../redux/Store";
 import { setContact, setToken, setUserData } from "../redux/User";
-import LoadingComponent from "../Component/LoadingComponent";
+import LoadingComponent from "../Component/LoadingComponent/LoadingComponent";
 
 
 type SocketProviderProps = {

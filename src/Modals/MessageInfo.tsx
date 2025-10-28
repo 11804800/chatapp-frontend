@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux"
-import type { RootState } from "../../redux/Store"
+import type { RootState } from "../redux/Store"
 import { LiaCheckDoubleSolid } from "react-icons/lia";
-import { toggleShowMessageInfo } from "../../redux/message";
+import { toggleShowMessageInfo } from "../redux/message";
 
 
 const formatDate = (dateStr: any) => {

@@ -57,7 +57,7 @@ const UserSlice = createSlice({
         updateLastMessage: (state, action: PayloadAction<any>) => {
             const index = state.contact.findIndex((item: any) => item.userId._id == action.payload.id);
             if (index < 0) {
-                console.log(action.payload);
+                return;
             }
             else {
                 state.contact[index].lastMessage = action.payload?.message;

@@ -2,8 +2,8 @@ import { useSelector } from "react-redux";
 import InputContainer from "../InputComponent/InputContainer"
 import MessageComponent from "../MessageComponent/MessageComponent"
 import type { RootState } from "../../redux/Store";
-import RecipentHeader from "../UserComponent/RecipentHeader";
-import ContactInfo from "../UserComponent/ContactInfo";
+import RecipentHeader from "../ReciverComponent/RecipentHeader";
+import ContactInfo from "../ReciverComponent/ContactInfo";
 import UploadMedia from "../InputComponent/UploadMedia";
 
 

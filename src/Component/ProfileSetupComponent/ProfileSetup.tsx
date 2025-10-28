@@ -4,7 +4,7 @@ import { MdOutlineEdit } from "react-icons/md";
 import { AxiosVite } from "../../utils/Axios";
 import { useDispatch } from "react-redux";
 import { setToken, SetUser } from "../../redux/User";
-import Loading from "./Loading";
+import Loading from "../LoadingComponent/Loading";
 
 function ProfileSetup({ setAccountCreated }: any) {
     const [loading, setLoading] = useState(false);
@@ -46,8 +46,10 @@ function ProfileSetup({ setAccountCreated }: any) {
         const fullname: any = name.split(" ");
         formdata.append("profile-image", Image);
         formdata.append("description", about);
-        formdata.append("firstname", fullname[0]);
-        formdata.append("lastname", fullname[1]);
+        if (name) {
+            formdata.append("firstname", fullname[0]);
+            formdata.append("lastname", fullname[1]);
+        }
         AxiosVite.put("/users", formdata, {
             headers: {
                 'Content-Type': 'multipart/form-data',

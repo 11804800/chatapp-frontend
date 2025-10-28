@@ -4,7 +4,7 @@ import { useRef, useState } from "react";
 import { AxiosVite } from "../../utils/Axios";
 import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "../../redux/Store";
-import { addNewStatus } from "../../redux/status";
+import { updateMyStatus } from "../../redux/status";
 
 function RenderFile({ file, index, setIndex }: any) {
     const fileType: string = file.type;
@@ -68,7 +68,7 @@ function StatusUpload({ file, setStatusActive }: any) {
                 },
             }).then((response) => {
                 if (response) {
-                    dispatch(addNewStatus(response.data.data));
+                    dispatch(updateMyStatus(response.data.data));
                 }
             }).catch((err) => {
                 console.log(err);
@@ -99,8 +99,8 @@ function StatusUpload({ file, setStatusActive }: any) {
                         {
                             items.map((item: any, i: number) => {
                                 return (
-                                    <div className="w-[50px] h-[50px] rounded-md">
-                                        <RenderFile file={item.file} key={i} index={i} setIndex={setIndex} />
+                                    <div key={i} className="w-[50px] h-[50px] rounded-md">
+                                        <RenderFile file={item.file} index={i} setIndex={setIndex} />
                                     </div>
                                 )
                             })

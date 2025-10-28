@@ -1,7 +1,7 @@
 import { BiCheckSquare, BiCommentAdd } from "react-icons/bi"
 import { IoSearchOutline } from "react-icons/io5";
 import { BsThreeDotsVertical } from "react-icons/bs"
-import RecipentList from "../UserComponent/RecipentList"
+import RecipentList from "../ReciverComponent/RecipentList"
 import { useDispatch, useSelector } from "react-redux"
 import { setSelectedContact, setShowContactModal, toggleSelectContact } from "../../redux/Contact";
 import { LuLogOut } from "react-icons/lu";
@@ -56,7 +56,6 @@ function MainPage() {
                 "Authorization": `Bearer ${token}`
             }
         }).then((response: any) => {
-            console.log(response.data)
             if (response) {
                 dispatch(toggleSelectContact());
                 dispatch(setSelectedContact());

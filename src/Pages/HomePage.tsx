@@ -1,6 +1,6 @@
 import { useContext, useEffect } from "react";
-import MainPage from "../Component/Home/MainPage.tsx";
-import MessageContainer from "../Component/Home/MessageContainer.tsx";
+import MainPage from "../Component/HomeComponent/MainPage.tsx";
+import MessageContainer from "../Component/HomeComponent/MessageContainer.tsx";
 import { SocketContext } from "../SocketProvider/SockerProvider.tsx";
 import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "../redux/Store.tsx";
@@ -8,6 +8,7 @@ import { addNewMessage, setMessage, updateMessage, updateRecived, updateSeen } f
 import { AddNewContact, updateLastMessage } from "../redux/User.tsx";
 import { AxiosVite } from "../utils/Axios.tsx";
 import { setIsTyping } from "../redux/Contact.tsx";
+
 
 function HomePage() {
 
@@ -88,7 +89,12 @@ function HomePage() {
       const contactExists = contact.some((item: any) => item.userId._id === publisherId);
       if (!contactExists) {
         dispatch(addNewMessage(data.data));
-        dispatch(updateLastMessage({ id: data.data.publisher, message: data.data.message }));
+        dispatch(updateLastMessage({
+          id: data.data.publisher,
+          mediaType: data.data.mediaType,
+          message: data.data.message ? data.data.message : data.data.mediaType == "audio" ? "audio" : data.data.media,
+          mediaDuration: data.data?.mediaDuration,
+        }));
       }
       else {
         const config = {
@@ -102,13 +108,24 @@ function HomePage() {
           dispatch(AddNewContact({
             userId: response.data,
             lastMessage: data.data.message,
-            unseenmessagecount: 1
+            unseenmessagecount: 1,
+            mediaType: data.data.mediaType,
+            message: data.data.mediaType == "audio" ? "audio" : data.data.media,
+            mediaDuration: data.data?.mediaDuration,
           }));
           dispatch(addNewMessage(data.data));
-          dispatch(updateLastMessage({ id: data.data.publisher, message: data.data.message }));
+          dispatch(updateLastMessage({
+            id: data.data.publisher, mediaType: data.data.mediaType,
+            message: data.data.message ? data.data.message : data.data.mediaType == "audio" ? "audio" : data.data.media,
+            mediaDuration: data.data?.mediaDuration,
+          }));
         }).catch((err) => { console.log(err.response.data) });
       }
+    });
 
+    socket.on("new-reaction-message", (data: any) => {
+      dispatch(updateLastMessage({ id: data.data.publisher, message: "Reacted to message", unseenmessagecount: 1 }));
+      dispatch(updateMessage(data.data));
     });
 
     socket.on("message-sent", (data: any) => {

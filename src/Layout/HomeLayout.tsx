@@ -1,5 +1,5 @@
 import { Outlet } from 'react-router'
-import Navigation from '../Component/Navbar/Navigation'
+import Navigation from '../Component/NavbarComponent/Navigation'
 import { useContext, useEffect } from 'react'
 import { SocketContext } from '../SocketProvider/SockerProvider'
 import { useDispatch, useSelector } from 'react-redux'

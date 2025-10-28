@@ -1,11 +1,11 @@
 import { TiTimes } from "react-icons/ti"
 import { useDispatch, useSelector } from "react-redux"
-import type { RootState } from "../../redux/Store"
-import { setContactData, setShowContactModal } from "../../redux/Contact";
+import type { RootState } from "../redux/Store"
+import { setContactData, setShowContactModal } from "../redux/Contact";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
-import { AddNewContact, setRecipientName } from "../../redux/User";
-import { AxiosVite } from "../../utils/Axios";
+import { AddNewContact, setRecipientName } from "../redux/User";
+import { AxiosVite } from "../utils/Axios";
 import { useEffect, useState } from "react";
 import { FaUser } from "react-icons/fa";
 
@@ -136,31 +136,37 @@ function ShowAllUserModal() {
                             <TiTimes />
                         </button>
                     </div>
-                    <div className="px-4 py-2 overflow-y-auto Scroll-Container">
-                        {
-                            ContactData.map((item: any, index: number) => {
-                                return (
-                                    <div onClick={() => addNewContact(item._id)} key={index} className="w-full flex hover:bg-zinc-200 active:bg-transparent p-2 rounded-lg">
-                                        {
-                                            item.image
-                                                ?
-                                                <img src={import.meta.env.VITE_IMAGE_URL + item.image} className="w-15 h-15 rounded-full shrink-0 object-cover" />
-                                                :
-                                                <div className="py-3 px-4 text-zinc-500 bg-zinc-100 rounded-full w-fit">
-                                                    <FaUser size={28} />
+                    {
+                        ContactData.length <= 0 ?
+                            <div className="h-full w-full flex justify-center items-center">
+                                <p className="text-md font-medium">No Users Found</p>
+                            </div> :
+                            <div className="px-4 py-2 overflow-y-auto Scroll-Container">
+                                {
+                                    ContactData.map((item: any, index: number) => {
+                                        return (
+                                            <div onClick={() => addNewContact(item._id)} key={index} className="w-full flex hover:bg-zinc-200 active:bg-transparent p-2 rounded-lg">
+                                                {
+                                                    item.image
+                                                        ?
+                                                        <img src={import.meta.env.VITE_IMAGE_URL + item.image} className="w-15 h-15 rounded-full shrink-0 object-cover" />
+                                                        :
+                                                        <div className="py-3 px-4 text-zinc-500 bg-zinc-100 rounded-full w-fit">
+                                                            <FaUser size={28} />
+                                                        </div>
+                                                }
+                                                <div className="flex justify-between w-full p-2">
+                                                    <div className="">
+                                                        <p className="font-medium text-sm">{item.firstname}{" "}{item.lastname}</p>
+                                                        <p className="text-[13px] line-clamp-1">{item?.description}</p>
+                                                    </div>
                                                 </div>
-                                        }
-                                        <div className="flex justify-between w-full p-2">
-                                            <div className="">
-                                                <p className="font-medium text-sm">{item.firstname}{" "}{item.lastname}</p>
-                                                <p className="text-[13px] line-clamp-1">{item?.description}</p>
                                             </div>
-                                        </div>
-                                    </div>
-                                )
-                            })
-                        }
-                    </div>
+                                        )
+                                    })
+                                }
+                            </div>
+                    }
                 </div>
             </div>
         )

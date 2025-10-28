@@ -52,49 +52,51 @@ function InputContainer() {
 
   function SendMessage(e: any) {
     e.preventDefault();
-    let body;
+    if (message) {
+      let body;
 
-    if (MessageId) {
-      body = {
-        message: message,
-        consumer: Reciver,
-        publisher: userData?._id,
-        sent: false,
-        createdAt: new Date().toISOString(),
-        reply: MessageId
-      }
-      dispatch(addNewMessage({
-        message: message,
-        consumer: Reciver,
-        publisher: userData?._id,
-        sent: false,
-        createdAt: new Date().toISOString(),
-        reply: {
-          _id: FilterMessage?._id,
-          message: FilterMessage?.message,
-          mediaType: FilterMessage?.messageType,
-          media: FilterMessage?.media,
-          mediaDuration: FilterMessage?.mediaDuration,
-          publisher: FilterMessage?.publisher
+      if (MessageId) {
+        body = {
+          message: message,
+          consumer: Reciver,
+          publisher: userData?._id,
+          sent: false,
+          createdAt: new Date().toISOString(),
+          reply: MessageId
         }
-      }));
-      dispatch(toggleReply());
-      dispatch(setMessageId(""));
-    }
-    else {
-      body = {
-        message: message,
-        consumer: Reciver,
-        publisher: userData?._id,
-        sent: false,
-        createdAt: new Date().toISOString()
+        dispatch(addNewMessage({
+          message: message,
+          consumer: Reciver,
+          publisher: userData?._id,
+          sent: false,
+          createdAt: new Date().toISOString(),
+          reply: {
+            _id: FilterMessage?._id,
+            message: FilterMessage?.message,
+            mediaType: FilterMessage?.messageType,
+            media: FilterMessage?.media,
+            mediaDuration: FilterMessage?.mediaDuration,
+            publisher: FilterMessage?.publisher
+          }
+        }));
+        dispatch(toggleReply());
+        dispatch(setMessageId(""));
       }
-      dispatch(addNewMessage(body));
-    }
+      else {
+        body = {
+          message: message,
+          consumer: Reciver,
+          publisher: userData?._id,
+          sent: false,
+          createdAt: new Date().toISOString()
+        }
+        dispatch(addNewMessage(body));
+      }
 
-    socket.emit("send-message", body);
-    dispatch(setLastMessage({ id: Reciver, message: message, mediaType: null, lastMessageTime: new Date().toISOString() }));
-    setMessage("");
+      socket.emit("send-message", body);
+      dispatch(setLastMessage({ id: Reciver, message: message, mediaType: null, lastMessageTime: new Date().toISOString() }));
+      setMessage("");
+    }
   }
 
 

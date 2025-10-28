@@ -1,14 +1,14 @@
 import { GoDownload } from "react-icons/go"
 import { IoMdClose } from "react-icons/io"
 import { useDispatch, useSelector } from "react-redux"
-import type { RootState } from "../../redux/Store"
-import { toggleCarousel } from "../../redux/message";
+import type { RootState } from "../redux/Store"
+import { toggleCarousel } from "../redux/message";
 import { HiMiniArrowLeft } from "react-icons/hi2";
 import { useState } from "react";
 import { IoChevronBackCircle } from "react-icons/io5";
 import { IoChevronForwardCircle } from "react-icons/io5";
-import { DateFormatter, TimeFormatter } from "../../utils/Formatter";
-import VideoPlayerComponent from "../VideoplayerComponent/VideoPlayerComponent";
+import { DateFormatter, TimeFormatter } from "../utils/Formatter";
+import VideoPlayerComponent from "../Component/VideoplayerComponent/VideoPlayerComponent";
 
 function RenderMedia({ item }: any) {
     if (item?.mediaType == "image") {

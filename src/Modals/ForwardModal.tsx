@@ -1,14 +1,14 @@
 import { TiTimes } from "react-icons/ti"
 import { useDispatch, useSelector } from "react-redux"
-import type { RootState } from "../../redux/Store"
-import { setContactData } from "../../redux/Contact";
+import type { RootState } from "../redux/Store"
+import { setContactData } from "../redux/Contact";
 import gsap from "gsap";
-import { AxiosVite } from "../../utils/Axios";
+import { AxiosVite } from "../utils/Axios";
 import { useContext, useEffect, useState } from "react";
 import { FaUser } from "react-icons/fa";
-import { addNewMessage, toggleForwardMessage } from "../../redux/message";
-import { AddNewContact, setLastMessage } from "../../redux/User";
-import { SocketContext } from "../../SocketProvider/SockerProvider";
+import { addNewMessage, toggleForwardMessage } from "../redux/message";
+import { AddNewContact, setLastMessage } from "../redux/User";
+import { SocketContext } from "../SocketProvider/SockerProvider";
 import { IoSend } from "react-icons/io5";
 
 function ForwardModal() {

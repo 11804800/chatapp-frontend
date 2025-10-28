@@ -134,7 +134,7 @@ function RenderMessage({ item }: any) {
                         {item?.reply && <ReplyMessage message={item.reply} />}
                         {item?.mediaType && <MediaContent item={item} />}
                         <div className={`flex flex-col items-end justify-between gap-1 pt-1`}>
-                            <p className={` text-black text-sm w-full  ${item?.mediaType ? "font-regular" : "font-medium"}`}>{item?.message}</p>
+                            <p className={` text-black text-sm w-full  ${item?.mediaType ? "font-regular" : "font-medium pr-12 pb-1"}`}>{item?.message}</p>
                             <div className="flex items-center gap-1">
                                 <p className="text-[10px] font-medium text-zinc-500 text-nowrap">{TimeFormatter(item?.createdAt)}</p>
                                 {!item.sent ? <span> <CiClock2 size={10} /> </span> : <> {item?.recived ? <> {item?.seen ? <BsCheck2All color="blue" /> : <BsCheck2All />} </> : <BiCheck />} </>}
@@ -146,14 +146,14 @@ function RenderMessage({ item }: any) {
                 {item?.reaction && <div className="absolute -bottom-7 p-2 bg-white drop-shadow rounded-full"><img src={`/${item?.reaction}.png`} className="w-5 h-5" /></div>}
                 {
                     showMessageOption &&
-                    <MessageOption setShowMessageOption={setShowMessageOption} showMessageOption={showMessageOption} ItemId={item?._id} />
+                    <MessageOption setShowMessageOption={setShowMessageOption} showMessageOption={showMessageOption} ItemId={item?._id} setShowReactionOption={setShowReactionOption} />
                 }
             </div>
         )
     }
     else {
         return (
-            <div id={item?._id} className={`${SelectedMessages.includes(item._id) && "bg-green-300/35"} group gap-2 flex justify-start px-2 md:px-12 relative items-center ${SelectMessage ? "w-full" : "w-fit"}`}>
+            <div id={item?._id} className={`${SelectedMessages.includes(item._id) && "bg-green-300/35"} group gap-2 flex justify-start px-2 md:px-12 relative items-center ${SelectMessage ? "w-full" : showReactionOption ? "w-full" : "w-fit"}`}>
                 {
                     SelectMessage &&
                     <button onClick={() => dispatch(addToSelectedMessage(item?._id))} className="p-2 flex">
@@ -176,7 +176,7 @@ function RenderMessage({ item }: any) {
                         {item?.reply && <ReplyMessage message={item.reply} />}
                         {item?.mediaType && <MediaContent item={item} />}
                         <div className="flex gap-3 pt-1 justify-between flex-col">
-                            <p className={` text-black text-sm w-full  ${item?.mediaType ? "font-regular" : "font-medium"}`}>{item?.message}</p>
+                            <p className={` text-black text-sm w-full   ${item?.mediaType ? "font-regular" : "font-medium pr-12"}`}>{item?.message}</p>
                             <div className="w-full self-end flex items-end pl-3"><p className="text-[10px] font-medium text-nowrap text-zinc-500 w-full justify-end flex">{TimeFormatter(item?.createdAt)}</p></div>
                         </div >
                     </div>
@@ -190,7 +190,7 @@ function RenderMessage({ item }: any) {
                 </button>
                 {
                     showMessageOption &&
-                    <MessageOption setShowMessageOption={setShowMessageOption} showMessageOption={showMessageOption} ItemId={item?._id} />
+                    <MessageOption setShowMessageOption={setShowMessageOption} showMessageOption={showMessageOption} ItemId={item?._id} setShowReactionOption={setShowReactionOption} />
                 }
             </div >
         )

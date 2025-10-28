@@ -37,6 +37,8 @@ function StatusPage() {
     return state.status.myStatus
   });
 
+
+
   useEffect(() => {
     if (token) {
       AxiosVite.get("/status", {
@@ -171,7 +173,13 @@ function StatusPage() {
                   return (
                     <div onClick={() => dispatch(setShowStatus(item?.userId?._id))} key={item._id} className="flex px-2 items-center gap-4 hover:bg-zinc-100 py-2 rounded-md">
                       <div className={`p-[2px] ${!SeenStatus(item?.userId?.status) ? "border-zinc-400" : "border-green-700"} border-2 rounded-full`}>
-                        <img src={import.meta.env.VITE_IMAGE_URL + item?.userId?.image} className="w-14 h-14 object-cover rounded-full" />
+                        {
+                          item?.userId?.image ?
+                            <img src={import.meta.env.VITE_IMAGE_URL + item?.userId?.image} className="w-14 h-14 object-cover rounded-full" /> :
+                            <div className="text-zinc-600 bg-zinc-200 rounded-full p-3 w-fit h-fit">
+                              <FaUser size={25} />
+                            </div>
+                        }
                       </div>
                       <div>
                         <p>{item?.userId?.firstname}{" "}{item?.userId?.lastname}</p>
