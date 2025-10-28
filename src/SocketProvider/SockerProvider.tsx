@@ -85,7 +85,10 @@ function SockerProvider({ children }: SocketProviderProps) {
     )
   }
   else {
-    const socket: any = io(ENDPOINTS);
+    const socket: any = io(ENDPOINTS, {
+      transports: ['polling', 'websocket'],
+      withCredentials: true
+    });
     return (
       <SocketContext.Provider value={{ socket: socket, file: file, setFile: setFile }}>
         {children}

@@ -9,6 +9,7 @@ import { IoChevronBackCircle } from "react-icons/io5";
 import { IoChevronForwardCircle } from "react-icons/io5";
 import { DateFormatter, TimeFormatter } from "../utils/Formatter";
 import VideoPlayerComponent from "../Component/VideoplayerComponent/VideoPlayerComponent";
+import { FaUser } from "react-icons/fa";
 
 function RenderMedia({ item }: any) {
     if (item?.mediaType == "image") {
@@ -78,7 +79,13 @@ function MediaCarousel() {
                     <button onClick={() => dispatch(toggleCarousel())} className="text-white flex md:hidden">
                         <HiMiniArrowLeft />
                     </button>
-                    <img src={import.meta.env.VITE_IMAGE_URL + FilterUser?.userId?.image} className="w-[50px] h-[50px] rounded-full object-cover hidden md:flex" />
+                    {
+                        FilterUser?.userId?.image ?
+                            <img src={import.meta.env.VITE_IMAGE_URL + FilterUser?.userId?.image} className="w-[50px] h-[50px] rounded-full object-cover hidden md:flex" /> :
+                            <div className="text-zinc-600 bg-zinc-200 rounded-full p-3 w-fit h-fit">
+                                <FaUser size={25} />
+                            </div>
+                    }
                     <div className="text-sm font-medium text-white md:text-black px-1">
                         <p>{FilterUser?.userId?.firstname}{" "}{FilterUser?.userId?.lastname}</p>
                         <p className="text-zinc-500 text-[12px]">{DateFormatter(MediaMessages[mediaIndex]?.createdAt)}{" "}{TimeFormatter(MediaMessages[mediaIndex]?.createdAt)}</p>
