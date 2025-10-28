@@ -71,8 +71,12 @@ function MessageComponent() {
   }, [recipentName, Messages]);
 
 
+  const isTyping = useSelector((state: RootState) => {
+    return state.contact.isTyping
+  });
 
-  const FilterMessage: any = Messages.filter((item: any) => item.consumer == recipentName || item.publisher == recipentName);
+
+  const FilterMessage: any = recipentName == userData?._id ? Messages.filter((item: any) => item.consumer == recipentName && item.publisher == recipentName) : Messages.filter((item: any) => item.consumer == recipentName || item.publisher == recipentName);
 
 
   if (FilterMessage.length <= 0) {
@@ -84,14 +88,25 @@ function MessageComponent() {
   }
   else {
     return (
-      <div id="Message-Container" ref={MessageContainerRef} className="h-full w-full py-14 px-4 md:py-24 xl:px-16 flex flex-col gap-8 overflow-y-auto Scroll-Container bg-zinc-50">
+      <div id="Message-Container" ref={MessageContainerRef} className="h-full w-full py-14 px-4 md:py-24  flex flex-col gap-8 overflow-y-auto Scroll-Container bg-zinc-50">
         {
           FilterMessage.map((item: Item, index: number) => {
             return (
               <RenderMessage key={index} item={item} />
             )
           })}
-      </div>
+        {
+          isTyping == recipentName &&
+          <div className="md:px-12 px-2">
+            <div className="flex items-start overflow-hidden drop-shadow">
+              <div className="rounded bg-white rotate-45 translate-x-[8px] -translate-y-1.5 w-[12px] h-[12px]"></div>
+              <div className="bg-white text-[11px] rounded-md w-fit p-2 relative">
+                typing...
+              </div>
+            </div>
+          </div>
+        }
+      </div >
     )
   }
 }

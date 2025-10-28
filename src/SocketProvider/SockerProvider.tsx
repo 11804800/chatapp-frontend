@@ -4,6 +4,7 @@ import { AxiosVite } from "../utils/Axios";
 import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "../redux/Store";
 import { setContact, setToken, setUserData } from "../redux/User";
+import LoadingComponent from "../Component/LoadingComponent";
 
 
 type SocketProviderProps = {
@@ -68,19 +69,7 @@ function SockerProvider({ children }: SocketProviderProps) {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center w-screen h-screen">
-        <div className="flex p-5">
-          <h1 className="font-medium text-2xl md:text-3xl">
-            Loading
-          </h1>
-          <div className="text-4xl overflow-hidden flex">
-            <div className="animate-bounce1">.</div>
-            <div className="animate-bounce1" style={{ animationDelay: '123ms' }}>.</div>
-            <div className="animate-bounce1">.</div>
-            <div className="animate-bounce1" style={{ animationDelay: '123ms' }}>.</div>
-          </div>
-        </div>
-      </div>
+      <LoadingComponent />
     )
   }
   else if (err == "Network Error") {

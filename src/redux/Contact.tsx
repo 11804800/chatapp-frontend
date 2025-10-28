@@ -5,7 +5,8 @@ interface ContactInterface {
     showContactModal: boolean,
     selectContact: boolean,
     showContactInfo: boolean,
-    selectedContact: any[]
+    selectedContact: any[],
+    isTyping: string
 }
 
 const initialState: ContactInterface = {
@@ -13,13 +14,17 @@ const initialState: ContactInterface = {
     showContactModal: false,
     selectContact: false,
     showContactInfo: false,
-    selectedContact: []
+    selectedContact: [],
+    isTyping: ""
 }
 
 const ContactSlice = createSlice({
     name: "contact",
     initialState,
     reducers: {
+        setIsTyping: (state, action: PayloadAction<string>) => {
+            state.isTyping = action.payload
+        },
         setShowContactModal: (state) => {
             state.showContactModal = !state.showContactModal
         },
@@ -55,4 +60,6 @@ export const {
     toggleSelectContact,
     toggleContactInfo,
     addToSelectContact,
-    setSelectedContact } = ContactSlice.actions;
+    setSelectedContact,
+    setIsTyping,
+} = ContactSlice.actions;

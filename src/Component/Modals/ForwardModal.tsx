@@ -21,12 +21,19 @@ function ForwardModal() {
         return state.contact.Data
     });
 
+    const token: any = useSelector((state: RootState) => {
+        return state.user.token
+    });
 
     useEffect(() => {
         async function FetchAllUser() {
             if (token && ContactData.length <= 0) {
                 setLoading(true);
-                AxiosVite.get("/users/all").then((response: any) => {
+                AxiosVite.get("/users/all", {
+                    headers: {
+                        "Authorization": `Bearer ${token}`
+                    }
+                }).then((response: any) => {
                     dispatch(setContactData(response.data.data));
                     setLoading(false);
                 }).catch((err: any) => {
@@ -49,10 +56,6 @@ function ForwardModal() {
         }
     }
 
-
-    const token = useSelector((state: RootState) => {
-        return state.user.token
-    });
 
     const dispatch = useDispatch();
 
@@ -166,7 +169,7 @@ function ForwardModal() {
 
     if (Loading) {
         return (
-            <div className="modal-container h-screen w-full bg-black/25 fixed top-0 z-50 flex justify-center items-center p-4">
+            <div className="modal-container h-screen w-full bg-black/25 fixed top-0 z-[9999] flex justify-center items-center p-4">
                 <div className="contact-modal origin-center overflow-hidden h-full w-full md:w-[600px] md:h-[550px] bg-white shadow-xl rounded-xl flex flex-col justify-center items-center">
                     <p>Loading...</p>
                 </div>
@@ -175,7 +178,7 @@ function ForwardModal() {
     }
     else {
         return (
-            <div className="modal-container h-screen w-full  bg-black/25 fixed top-0 z-50 flex justify-center items-center md:p-4">
+            <div className="modal-container h-screen w-full  bg-black/25 fixed top-0 z-[9999] flex justify-center items-center md:p-4">
                 <div className="contact-modal origin-center overflow-hidden h-full w-full md:w-[600px] md:h-[550px] bg-white shadow-xl md:rounded-xl flex flex-col">
                     <div className="flex justify-between w-full py-4 px-4">
                         <h1 className="text-xl font-medium">
@@ -187,7 +190,7 @@ function ForwardModal() {
                     </div>
                     <div className="px-4 py-2 overflow-y-auto Scroll-Container flex-1 flex flex-col gap-1">
                         {
-                            ContactData.filter((item: any) => item?._id != UserData?._id).map((item: any, index: number) => {
+                            ContactData.map((item: any, index: number) => {
                                 return (
                                     <div onClick={() => {
                                         addToForwardList(item?._id)

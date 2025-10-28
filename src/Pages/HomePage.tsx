@@ -7,6 +7,7 @@ import type { RootState } from "../redux/Store.tsx";
 import { addNewMessage, setMessage, updateMessage, updateRecived, updateSeen } from "../redux/message.tsx";
 import { AddNewContact, updateLastMessage } from "../redux/User.tsx";
 import { AxiosVite } from "../utils/Axios.tsx";
+import { setIsTyping } from "../redux/Contact.tsx";
 
 function HomePage() {
 
@@ -123,6 +124,16 @@ function HomePage() {
     socket.on("message-recived-ack", (data: any) => {
       dispatch(updateRecived(data.data.data));
     })
+
+    socket.on("user-typing", (data: any) => {
+      dispatch(setIsTyping(data.publisher));
+    });
+    socket.on("user-stopped-typing", (data: any) => {
+      if (data) {
+        dispatch(setIsTyping(""));
+      }
+    });
+
 
 
 

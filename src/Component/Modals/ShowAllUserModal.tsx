@@ -17,11 +17,23 @@ function ShowAllUserModal() {
         return state.contact.Data
     });
 
+    const token = useSelector((state: RootState) => {
+        return state.user.token
+    });
+
+    const dispatch = useDispatch();
+
     useEffect(() => {
         async function FetchAllUser() {
+            const config = {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            };
             if (token && ContactData.length <= 0) {
                 setLoading(true);
-                AxiosVite.get("/users/all").then((response: any) => {
+                AxiosVite.get("/users/all", config).then((response: any) => {
                     dispatch(setContactData(response.data.data));
                     setLoading(false);
                 }).catch((err: any) => {
@@ -35,11 +47,7 @@ function ShowAllUserModal() {
 
 
 
-    const token = useSelector((state: RootState) => {
-        return state.user.token
-    });
 
-    const dispatch = useDispatch();
 
     useGSAP(() => {
         gsap.from(".modal-container", {
@@ -109,7 +117,7 @@ function ShowAllUserModal() {
 
     if (Loading) {
         return (
-            <div className="modal-container h-screen w-full bg-black/25 fixed top-0 z-50 flex justify-center items-center p-4">
+            <div className="modal-container h-screen w-full bg-black/25 fixed top-0 z-[9999] flex justify-center items-center p-4">
                 <div className="contact-modal origin-center overflow-hidden w-[550px] h-[550px] bg-white shadow-xl rounded-xl flex flex-col justify-center items-center">
                     <p>Loading...</p>
                 </div>
@@ -118,7 +126,7 @@ function ShowAllUserModal() {
     }
     else {
         return (
-            <div className="modal-container h-screen w-full bg-black/25 fixed top-0 z-50 flex justify-center items-center p-4">
+            <div className="modal-container h-screen w-full bg-black/25 fixed top-0 z-[9999] flex justify-center items-center p-4">
                 <div className="contact-modal origin-center overflow-hidden w-[550px] h-[550px] bg-white shadow-xl rounded-xl flex flex-col">
                     <div className="flex justify-between w-full py-4 px-4">
                         <h1 className="text-xl font-medium">

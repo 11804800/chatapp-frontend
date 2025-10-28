@@ -6,11 +6,12 @@ import { BiArrowBack, BiInfoCircle, BiTrash } from "react-icons/bi";
 import { useEffect, useRef, useState } from "react";
 import { removeContact, setRecipientName } from "../../redux/User";
 import { IoSearchSharp } from "react-icons/io5";
-import { deleteMessages, filterMessage, setSelectedMessages, toggleSelectMessage } from "../../redux/message";
+import { deleteMessages, filterMessage, setMessageId, setSelectedMessages, toggleForwardMessage, toggleReply, toggleSelectMessage, toggleShowMessageInfo } from "../../redux/message";
 import { AxiosVite } from "../../utils/Axios";
 import { LiaTimesSolid } from "react-icons/lia";
 import { toggleContactInfo } from "../../redux/Contact";
-
+import { TbArrowForwardUpDouble } from "react-icons/tb";
+import { PiArrowBendUpLeftBold } from "react-icons/pi";
 
 function RenderRecipentHeaderOptions({ setDeleteMessage }: any) {
 
@@ -19,6 +20,8 @@ function RenderRecipentHeaderOptions({ setDeleteMessage }: any) {
   });
 
   const optionref: any = useRef(null);
+  const MessageOptionRef: any = useRef(null);
+  const [MessageOptionsActive, setMessageOptionActive] = useState(false);
   const dispatch = useDispatch();
 
   const [showOptionsOpen, setShowOptions] = useState(false);
@@ -38,6 +41,8 @@ function RenderRecipentHeaderOptions({ setDeleteMessage }: any) {
   const SelectedMessage: any = useSelector((state: RootState) => {
     return state.message.selectedMessage
   });
+
+
 
   function DeleteMessage() {
     setDeleteMessage(true);
@@ -96,6 +101,11 @@ function RenderRecipentHeaderOptions({ setDeleteMessage }: any) {
     });
   }
 
+  const Message: any = useSelector((state: RootState) => {
+    return state.message.messages
+  });
+
+  const FilterMessage: any = Message.find((item: any) => item?._id == SelectedMessage[0]);
 
 
   useEffect(() => {
@@ -111,9 +121,32 @@ function RenderRecipentHeaderOptions({ setDeleteMessage }: any) {
     };
   }, [showOptionsOpen]);
 
+  useEffect(() => {
+    if (!MessageOptionsActive) return;
+    const handler = (e: any) => {
+      if (MessageOptionRef.current && !MessageOptionRef.current.contains(e.target)) {
+        setShowOptions(false);
+      }
+    };
+    document.addEventListener("mousedown", handler);
+    return () => {
+      document.removeEventListener("mousedown", handler);
+    };
+  }, [MessageOptionsActive]);
+
   if (selectMessage) {
     return (
-      <div className="flex gap-10">
+      <div className="flex gap-2 sm:gap-4 md:gap-10">
+        {
+          SelectedMessage.length == 1 &&
+          <button onClick={() => {
+            dispatch(setMessageId(SelectedMessage[0]));
+            setMessageOptionActive(false);
+            dispatch(toggleReply())
+          }} className="px-2 py-2 active:bg-transparent hover:bg-zinc-200 rounded-full flex md:hidden">
+            <PiArrowBendUpLeftBold size={21} />
+          </button>
+        }
         {
           SelectedMessage.length <= 10 &&
           <button onClick={DeleteMessage} className="px-2 py-2 active:bg-transparent hover:bg-zinc-200 rounded-full"><BiTrash size={24} /></button>
@@ -122,7 +155,37 @@ function RenderRecipentHeaderOptions({ setDeleteMessage }: any) {
           dispatch(setSelectedMessages());
           dispatch(toggleSelectMessage());
         }}><LiaTimesSolid size={24} /></button>
-      </div>
+        {
+          SelectedMessage.length == 1 &&
+          <>
+            <button onClick={() => {
+              dispatch(toggleForwardMessage());
+              dispatch(setMessageId(SelectedMessage[0]));
+            }} className="px-2 py-2 active:bg-transparent hover:bg-zinc-200 rounded-full flex md:hidden">
+              <TbArrowForwardUpDouble size={24} />
+            </button>
+            <div className="relative flex items-center">
+              <button onClick={() => setMessageOptionActive(true)} className="px-2 py-2 active:bg-transparent hover:bg-zinc-200 rounded-full flex md:hidden">
+                <BsThreeDotsVertical size={24} />
+              </button>
+              {
+                MessageOptionsActive &&
+                <div ref={MessageOptionRef} className="absolute top-9 z-[999] rounded-md right-0 bg-zinc-50 p-4 drop-shadow-2xl">
+                  <button className="pl-2 pr-16 py-2 hover:bg-zinc-200 rounded-md" onClick={() => {
+                    dispatch(setMessageId(SelectedMessage[0]));
+                    dispatch(toggleShowMessageInfo());
+                    setMessageOptionActive(false);
+                  }}>Info</button>
+                  <button onClick={() => {
+                    navigator.clipboard.writeText(FilterMessage?.message);
+                    setMessageOptionActive(false);
+                  }} className="pl-2 pr-16 py-2 hover:bg-zinc-200 rounded-md">Copy</button>
+                </div>
+              }
+            </div>
+          </>
+        }
+      </div >
     )
   }
   else {
